@@ -5,629 +5,1166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart City Dashboard</title>
   <style>
-    :root {
-      --bg: #0a0e1a;
-      --panel: #111827;
-      --border: #1e2d45;
-      --accent: #00d4ff;
-      --accent2: #7c3aed;
-      --green: #10b981;
-      --yellow: #f59e0b;
-      --red: #ef4444;
-      --text: #e2e8f0;
-      --muted: #64748b;
-    }
+    /* ── Reset & Variáveis ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #060b16;
+      --surface: #0d1524;
+      --panel:   #111d2e;
+      --border:  #1a2d45;
+      --accent:  #00c8f8;
+      --purple:  #7c3aed;
+      --green:   #10b981;
+      --yellow:  #f59e0b;
+      --red:     #ef4444;
+      --orange:  #f97316;
+      --text:    #e2e8f0;
+      --muted:   #5a7290;
+      --radius:  12px;
+    }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ── Header ── */
+    /* ── Header ──────────────────────────────────────────────────────── */
     header {
-      background: linear-gradient(135deg, #0a0e1a 0%, #111827 100%);
+      background: linear-gradient(180deg, #0a1220 0%, var(--bg) 100%);
       border-bottom: 1px solid var(--border);
-      padding: 1.2rem 2rem;
+      padding: 14px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
+      backdrop-filter: blur(10px);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-    }
+    .logo { display: flex; align-items: center; gap: 12px; }
 
-    .logo-icon {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 10px;
+    .logo-badge {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
+      border-radius: 11px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
+      font-size: 20px;
+      box-shadow: 0 0 24px rgba(0,200,248,.25);
     }
 
-    .logo h1 { font-size: 1.25rem; font-weight: 700; }
-    .logo p  { font-size: .75rem; color: var(--muted); }
+    .logo-text h1 { font-size: 16px; font-weight: 700; letter-spacing: .3px; }
+    .logo-text p  { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
-    .status-bar {
-      display: flex; align-items: center; gap: 1.5rem;
-      font-size: .8rem; color: var(--muted);
+    .header-right { display: flex; align-items: center; gap: 20px; }
+
+    .live-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(16,185,129,.08);
+      border: 1px solid rgba(16,185,129,.25);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 600;
     }
 
-    .live-dot {
-      width: 8px; height: 8px;
+    .dot {
+      width: 7px; height: 7px;
       border-radius: 50%;
       background: var(--green);
       box-shadow: 0 0 8px var(--green);
-      animation: pulse 2s infinite;
+      animation: blink 2s infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: .4; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    #sync-time { font-size: 11px; color: var(--muted); }
+
+    /* ── Tabs ────────────────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      padding: 0 28px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
     }
 
-    /* ── Layout ── */
-    main { padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; }
+    .tab {
+      padding: 13px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color .2s, border-color .2s;
+      display: flex; align-items: center; gap: 7px;
+      user-select: none;
+    }
 
+    .tab:hover   { color: var(--text); }
+    .tab.active  {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Main layout ─────────────────────────────────────────────────── */
+    main { flex: 1; padding: 20px 28px; max-width: 1440px; width: 100%; margin: 0 auto; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Grid helpers ────────────────────────────────────────────────── */
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 1.25rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
-    /* ── Cards ── */
+    @media (max-width: 1100px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 700px)  { .grid-3 { grid-template-columns: 1fr; } }
+
+    /* ── Card base ───────────────────────────────────────────────────── */
     .card {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem;
-      position: relative;
+      border-radius: var(--radius);
       overflow: hidden;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
 
-    .card:hover { border-color: var(--accent); }
+    .card:hover {
+      border-color: rgba(0,200,248,.35);
+      box-shadow: 0 0 20px rgba(0,200,248,.06);
+    }
 
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
+    .card-stripe {
       height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      background: linear-gradient(90deg, var(--accent), var(--purple));
     }
+
+    .card-stripe.green  { background: linear-gradient(90deg, #10b981, #34d399); }
+    .card-stripe.yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .card-stripe.purple { background: linear-gradient(90deg, var(--purple), #a855f7); }
+
+    .card-body { padding: 16px; }
 
     .card-header {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 14px;
     }
 
     .card-title {
-      display: flex; align-items: center; gap: .5rem;
-      font-size: .95rem; font-weight: 600;
+      display: flex; align-items: center; gap: 9px;
+      font-size: 13px; font-weight: 600;
     }
 
     .card-icon {
-      width: 32px; height: 32px;
+      width: 30px; height: 30px;
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
+      font-size: 15px;
     }
 
-    .icon-traffic  { background: rgba(0,212,255,.15); }
-    .icon-light    { background: rgba(245,158,11,.15); }
-    .icon-weather  { background: rgba(124,58,237,.15); }
+    .icon-traffic  { background: rgba(0,200,248,.12); }
+    .icon-light    { background: rgba(245,158,11,.12); }
+    .icon-weather  { background: rgba(124,58,237,.12); }
+    .icon-events   { background: rgba(16,185,129,.12); }
+    .icon-flow     { background: rgba(239,68,68,.12); }
 
+    /* ── Badge ───────────────────────────────────────────────────────── */
     .badge {
-      font-size: .7rem; padding: .2rem .6rem;
-      border-radius: 999px; font-weight: 600;
-    }
-
-    .badge-green  { background: rgba(16,185,129,.15); color: var(--green); }
-    .badge-yellow { background: rgba(245,158,11,.15);  color: var(--yellow); }
-    .badge-red    { background: rgba(239,68,68,.15);   color: var(--red); }
-    .badge-blue   { background: rgba(0,212,255,.15);   color: var(--accent); }
-
-    /* ── Métricas ── */
-    .metric {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: .6rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: .85rem;
-    }
-
-    .metric:last-child { border-bottom: none; }
-    .metric-label { color: var(--muted); }
-    .metric-value { font-weight: 600; }
-
-    /* ── Barra de progresso ── */
-    .bar-wrap {
-      background: var(--border);
+      font-size: 10px; font-weight: 700;
+      padding: 3px 8px;
       border-radius: 999px;
-      height: 6px;
-      margin-top: .3rem;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+
+    .badge-cyan   { background: rgba(0,200,248,.12);  color: var(--accent); border: 1px solid rgba(0,200,248,.2); }
+    .badge-yellow { background: rgba(245,158,11,.12); color: var(--yellow); border: 1px solid rgba(245,158,11,.2); }
+    .badge-purple { background: rgba(124,58,237,.12); color: #a78bfa;       border: 1px solid rgba(124,58,237,.2); }
+    .badge-green  { background: rgba(16,185,129,.12); color: var(--green);  border: 1px solid rgba(16,185,129,.2); }
+    .badge-red    { background: rgba(239,68,68,.12);  color: var(--red);    border: 1px solid rgba(239,68,68,.2); }
+    .badge-orange { background: rgba(249,115,22,.12); color: var(--orange); border: 1px solid rgba(249,115,22,.2); }
+
+    /* ── Divider row ─────────────────────────────────────────────────── */
+    .row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(26,45,69,.8);
+      font-size: 13px;
+    }
+
+    .row:last-child { border-bottom: none; }
+    .row-label { color: var(--muted); }
+    .row-value { font-weight: 600; }
+
+    /* ── Progress bar ────────────────────────────────────────────────── */
+    .bar-track {
+      background: rgba(26,45,69,.9);
+      border-radius: 999px;
+      height: 5px;
       overflow: hidden;
+      margin-top: 5px;
     }
 
     .bar-fill {
       height: 100%;
       border-radius: 999px;
-      transition: width .8s ease;
+      transition: width .8s cubic-bezier(.4,0,.2,1);
     }
 
     .bar-green  { background: linear-gradient(90deg, #10b981, #34d399); }
     .bar-yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
     .bar-red    { background: linear-gradient(90deg, #ef4444, #f87171); }
-    .bar-blue   { background: linear-gradient(90deg, #00d4ff, #7c3aed); }
+    .bar-cyan   { background: linear-gradient(90deg, var(--accent), var(--purple)); }
 
-    /* ── Semáforo ── */
-    .traffic-light {
-      display: flex; gap: .4rem; align-items: center;
+    /* ── Traffic light indicator ─────────────────────────────────────── */
+    .tl {
+      display: flex; gap: 5px; align-items: center;
     }
 
     .tl-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      opacity: .2;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      opacity: .15;
+      transition: opacity .3s, box-shadow .3s;
     }
 
-    .tl-dot.active { opacity: 1; box-shadow: 0 0 8px currentColor; }
-    .tl-red    { background: var(--red);    color: var(--red); }
-    .tl-yellow { background: var(--yellow); color: var(--yellow); }
-    .tl-green  { background: var(--green);  color: var(--green); }
+    .tl-dot.on { opacity: 1; }
 
-    /* ── Seção de tráfego (lista) ── */
-    .section-row {
-      padding: .7rem 0;
-      border-bottom: 1px solid var(--border);
+    .tl-r { background: var(--red);    }
+    .tl-y { background: var(--yellow); }
+    .tl-g { background: var(--green);  }
+    .tl-r.on { box-shadow: 0 0 8px var(--red);    }
+    .tl-y.on { box-shadow: 0 0 8px var(--yellow); }
+    .tl-g.on { box-shadow: 0 0 8px var(--green);  }
+
+    /* ── Section/Zone blocks ─────────────────────────────────────────── */
+    .section {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(26,45,69,.8);
     }
 
-    .section-row:last-child { border-bottom: none; }
+    .section:last-child { border-bottom: none; }
 
-    .section-top {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: .4rem;
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
     }
 
-    .section-name { font-size: .85rem; font-weight: 600; }
+    .section-name { font-weight: 600; font-size: 13px; }
+    .section-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    /* ── Zonas de iluminação ── */
-    .zone-row {
-      padding: .7rem 0;
-      border-bottom: 1px solid var(--border);
+    .bar-label {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--muted); margin-bottom: 4px;
     }
 
-    .zone-row:last-child { border-bottom: none; }
-
-    .zone-top {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: .4rem;
+    /* ── Weather big display ─────────────────────────────────────────── */
+    .weather-hero {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 14px;
+      padding: 12px;
+      background: rgba(0,0,0,.2);
+      border-radius: 10px;
     }
 
-    .zone-name { font-size: .85rem; font-weight: 600; }
+    .weather-emoji { font-size: 48px; line-height: 1; }
 
-    /* ── Painel de ajuste ── */
-    .adjust-panel {
+    .weather-temp {
+      font-size: 38px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+
+    .weather-cond { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Adjust panel ────────────────────────────────────────────────── */
+    .adjust-card {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .adjust-panel::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 16px;
     }
 
     .adjust-title {
-      font-size: .95rem; font-weight: 600;
-      margin-bottom: 1rem;
-      display: flex; align-items: center; gap: .5rem;
+      font-size: 13px; font-weight: 600;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px; color: var(--text);
     }
 
-    .form-row {
-      display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;
-    }
+    .form-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
 
-    .form-group { display: flex; flex-direction: column; gap: .4rem; }
-    .form-label { font-size: .75rem; color: var(--muted); }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label { font-size: 11px; color: var(--muted); font-weight: 500; }
 
-    .form-select, .form-input {
+    .field select,
+    .field input {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
-      padding: .55rem .9rem;
-      font-size: .85rem;
+      padding: 8px 12px;
+      font-size: 13px;
       outline: none;
       transition: border-color .2s;
     }
 
-    .form-select:focus, .form-input:focus { border-color: var(--accent); }
+    .field select:focus,
+    .field input:focus { border-color: var(--accent); }
 
     .btn {
-      padding: .55rem 1.4rem;
+      padding: 8px 18px;
       border-radius: 8px;
       border: none;
-      font-size: .85rem;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity .2s, transform .1s;
+      transition: opacity .15s, transform .1s;
+      display: flex; align-items: center; gap: 6px;
     }
 
-    .btn:hover   { opacity: .85; }
-    .btn:active  { transform: scale(.97); }
+    .btn:hover  { opacity: .85; }
+    .btn:active { transform: scale(.97); }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--purple)); color: #fff; }
+    .btn-ghost   { background: rgba(16,185,129,.1); color: var(--green); border: 1px solid rgba(16,185,129,.25); }
 
-    .btn-auto {
-      background: rgba(16,185,129,.15);
-      color: var(--green);
-      border: 1px solid rgba(16,185,129,.3);
-    }
-
-    /* ── Toast de feedback ── */
+    /* ── Toast ───────────────────────────────────────────────────────── */
     #toast {
-      position: fixed; bottom: 2rem; right: 2rem;
+      position: fixed; bottom: 24px; right: 24px;
       background: var(--panel);
       border: 1px solid var(--green);
       color: var(--green);
-      padding: .75rem 1.25rem;
+      padding: 10px 16px;
       border-radius: 10px;
-      font-size: .85rem;
+      font-size: 13px;
+      font-weight: 500;
       opacity: 0;
-      transform: translateY(10px);
-      transition: all .3s;
+      transform: translateY(8px);
+      transition: all .25s;
       z-index: 999;
       pointer-events: none;
+      max-width: 320px;
     }
 
-    #toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    #toast.show { opacity: 1; transform: translateY(0); }
 
-    /* ── Rodapé ── */
-    .footer {
-      text-align: center;
-      padding: 1.5rem;
+    /* ────────────────────────────────────────────────────────────────── */
+    /* ABA 2 — FLUXO DE DADOS                                            */
+    /* ────────────────────────────────────────────────────────────────── */
+
+    .flow-page { display: flex; flex-direction: column; gap: 20px; }
+
+    .flow-section-title {
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
       color: var(--muted);
-      font-size: .75rem;
+      margin-bottom: 12px;
+    }
+
+    .flow-pipeline {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .flow-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      min-width: 200px;
+      flex-shrink: 0;
+    }
+
+    .flow-box-title {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .6px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .flow-box-sub {
+      font-size: 12px; font-weight: 600; margin-bottom: 6px;
+    }
+
+    .flow-code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 11px;
+      color: #7dd3fc;
+      background: rgba(0,0,0,.35);
+      border-radius: 6px;
+      padding: 8px 10px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 6px;
+      flex-shrink: 0;
+      gap: 4px;
+    }
+
+    .flow-arrow-line {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .arrow-svg { color: var(--accent); }
+
+    .flow-arrow-label {
+      font-size: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: .3px;
+      white-space: nowrap;
+    }
+
+    .flow-arrow-anim {
+      width: 60px;
+      height: 6px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(0,200,248,.08);
+    }
+
+    .flow-arrow-anim::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -40px;
+      width: 40px; height: 100%;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: flow 1.4s linear infinite;
+    }
+
+    @keyframes flow { to { left: 100%; } }
+
+    .flow-hub {
+      background: linear-gradient(135deg, rgba(0,200,248,.08), rgba(124,58,237,.08));
+      border: 1px solid rgba(0,200,248,.25);
+      box-shadow: 0 0 30px rgba(0,200,248,.06);
+    }
+
+    .flow-hub .flow-box-sub { color: var(--accent); }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) { .flow-grid { grid-template-columns: 1fr; } }
+
+    .flow-subsystem {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .flow-label-row {
+      display: flex; gap: 6px; align-items: center; margin-bottom: 8px;
+    }
+
+    /* ── Pattern card ─────────────────────────────────────────────────── */
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .pattern-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .pattern-icon { font-size: 22px; margin-bottom: 8px; }
+    .pattern-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .pattern-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ────────────────────────────────────────────────────────────────── */
+    /* ABA 3 — LOG DE EVENTOS                                            */
+    /* ────────────────────────────────────────────────────────────────── */
+
+    .event-log-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .event-log-title {
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    #events-container {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+
+    .event-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 14px;
+      animation: slideIn .25s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .event-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 3px; flex-shrink: 0;
+    }
+
+    .event-content { flex: 1; min-width: 0; }
+
+    .event-name {
+      font-size: 12px; font-weight: 700;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      margin-bottom: 3px;
+    }
+
+    .event-payload {
+      font-size: 11px; color: var(--muted);
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .event-time {
+      font-size: 11px; color: var(--muted);
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    .empty-state {
+      text-align: center; padding: 40px 0;
+      color: var(--muted); font-size: 13px;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 14px 28px;
+      color: var(--muted);
+      font-size: 11px;
       border-top: 1px solid var(--border);
-      margin-top: 1rem;
+      margin-top: auto;
     }
 
-    /* ── Clima destaque ── */
-    .weather-big {
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 1rem;
-    }
+    /* ── Misc ────────────────────────────────────────────────────────── */
+    .ts { font-size: 10px; color: var(--muted); margin-top: 6px; }
+    .loading { color: var(--muted); text-align: center; padding: 20px 0; font-size: 13px; }
 
-    .weather-emoji { font-size: 3rem; line-height: 1; }
+    .separator { height: 1px; background: var(--border); margin: 14px 0; }
 
-    .weather-temp {
-      font-size: 2.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .weather-cond {
-      font-size: .85rem; color: var(--muted); margin-top: .2rem;
-    }
-
-    /* ── Timestamp ── */
-    .ts { font-size: .7rem; color: var(--muted); margin-top: .5rem; }
-
-    /* ── Loading ── */
-    .loading {
-      color: var(--muted); font-size: .85rem;
-      padding: 1rem 0; text-align: center;
-    }
-
-    @media (max-width: 600px) {
-      main { padding: 1rem; }
-      header { padding: 1rem; }
-      .form-row { flex-direction: column; }
+    .section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted); margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
 
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
 <header>
   <div class="logo">
-    <div class="logo-icon">🏙️</div>
-    <div>
-      <h1>Smart City Dashboard</h1>
-      <p>Middleware de Integração Urbana</p>
+    <div class="logo-badge">🏙️</div>
+    <div class="logo-text">
+      <h1>Smart City Middleware</h1>
+      <p>Plataforma de Integração Urbana · Interoperabilidade de Sistemas</p>
     </div>
   </div>
-  <div class="status-bar">
-    <div class="live-dot"></div>
-    <span>AO VIVO</span>
-    <span id="last-sync">–</span>
+  <div class="header-right">
+    <span id="sync-time">–</span>
+    <div class="live-pill"><div class="dot"></div> AO VIVO</div>
   </div>
 </header>
 
+<!-- ── Tabs ────────────────────────────────────────────────────────────────── -->
+<div class="tabs">
+  <div class="tab active" data-tab="dashboard">📊 Dashboard</div>
+  <div class="tab" data-tab="flow">🔀 Fluxo de Dados</div>
+  <div class="tab" data-tab="events">📡 Log de Eventos</div>
+</div>
+
+<!-- ── Main ────────────────────────────────────────────────────────────────── -->
 <main>
 
-  <!-- ── Painel de ajuste ── -->
-  <div class="adjust-panel" style="position:relative">
-    <div class="adjust-title">⚙️ Ajuste de Iluminação</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Zona</label>
-        <select id="zone-select" class="form-select">
-          <option value="">Carregando...</option>
-        </select>
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ABA 1 — DASHBOARD                                                      -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panel-dashboard" class="tab-panel active">
+
+    <!-- Ajuste de iluminação -->
+    <div class="adjust-card">
+      <div class="adjust-title">⚙️ Controle de Iluminação</div>
+      <div class="form-row">
+        <div class="field">
+          <label>Zona urbana</label>
+          <select id="zone-select" style="min-width:160px">
+            <option>Aguardando dados…</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Intensidade 0–100 &nbsp;(vazio = automático)</label>
+          <input id="intensity-input" type="number" min="0" max="100"
+                 placeholder="Automático" style="width:180px" />
+        </div>
+        <button class="btn btn-primary" onclick="adjustLighting()">⚡ Aplicar</button>
+        <button class="btn btn-ghost"   onclick="adjustLighting(true)">🤖 Automático</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Intensidade (0–100) — deixe vazio para automático</label>
-        <input id="intensity-input" type="number" min="0" max="100"
-               placeholder="Automático" class="form-input" style="width:220px" />
+    </div>
+
+    <!-- Cards -->
+    <div class="grid-3">
+
+      <!-- Tráfego -->
+      <div class="card">
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon icon-traffic">🚦</div>
+              Sistema de Tráfego
+            </div>
+            <span class="badge badge-cyan">JSON</span>
+          </div>
+          <div id="traffic-list" class="loading">Carregando…</div>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="adjustLighting()">Aplicar</button>
-      <button class="btn btn-auto" onclick="adjustLighting(true)">🤖 Ajuste Automático</button>
+
+      <!-- Iluminação -->
+      <div class="card">
+        <div class="card-stripe yellow"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon icon-light">💡</div>
+              Iluminação Pública
+            </div>
+            <span class="badge badge-yellow">CSV</span>
+          </div>
+          <div id="lighting-list" class="loading">Carregando…</div>
+        </div>
+      </div>
+
+      <!-- Clima -->
+      <div class="card">
+        <div class="card-stripe purple"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon icon-weather">🌤️</div>
+              Meteorologia
+            </div>
+            <span class="badge badge-purple">XML</span>
+          </div>
+          <div id="weather-content" class="loading">Carregando…</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- ── Tráfego + Clima ── -->
-  <div class="grid-3">
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ABA 2 — FLUXO DE DADOS                                                 -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panel-flow" class="tab-panel flow-page">
 
-    <!-- Tráfego -->
-    <div class="card" id="card-traffic">
-      <div class="card-header">
-        <div class="card-title">
-          <div class="card-icon icon-traffic">🚦</div>
-          Sistema de Tráfego
+    <!-- Padrões utilizados -->
+    <div>
+      <div class="flow-section-title">Padrões de projeto aplicados</div>
+      <div class="pattern-grid">
+        <div class="pattern-card">
+          <div class="pattern-icon">🔌</div>
+          <div class="pattern-name">Adapter</div>
+          <div class="pattern-desc">
+            Cada subsistema tem um adaptador que converte o formato proprietário
+            (JSON, CSV, XML) para o schema canônico sem alterar o sistema original.
+          </div>
         </div>
-        <span class="badge badge-blue">JSON</span>
+        <div class="pattern-card">
+          <div class="pattern-icon">🔄</div>
+          <div class="pattern-name">Observer / Event Bus</div>
+          <div class="pattern-desc">
+            Mudanças em um subsistema disparam eventos no EventBus.
+            Os demais reagem automaticamente — sem acoplamento direto.
+          </div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-icon">🎯</div>
+          <div class="pattern-name">Strategy</div>
+          <div class="pattern-desc">
+            Os adaptadores são intercambiáveis. Trocar o fornecedor de tráfego,
+            por exemplo, não exige alteração no CityHub.
+          </div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-icon">💉</div>
+          <div class="pattern-name">Dependency Injection</div>
+          <div class="pattern-desc">
+            O CityHub recebe os adaptadores via construtor, facilitando
+            testes unitários com mocks isolados.
+          </div>
+        </div>
       </div>
-      <div id="traffic-list" class="loading">Carregando...</div>
     </div>
 
-    <!-- Iluminação -->
-    <div class="card" id="card-lighting">
-      <div class="card-header">
-        <div class="card-title">
-          <div class="card-icon icon-light">💡</div>
-          Iluminação Pública
+    <div class="separator"></div>
+
+    <!-- Pipelines de transformação -->
+    <div>
+      <div class="flow-section-title">Pipeline de transformação — dados brutos → schema canônico</div>
+      <div class="flow-grid">
+
+        <!-- Tráfego -->
+        <div class="flow-subsystem">
+          <div class="flow-label-row">
+            <span class="badge badge-cyan">🚦 Tráfego</span>
+          </div>
+          <div class="flow-box">
+            <div class="flow-box-title">Formato bruto (JSON)</div>
+            <div class="flow-box-sub">Sistema externo envia:</div>
+            <div class="flow-code">{
+  "section_id": "AV-BRASIL-01",
+  "vehicles_per_min": 42,
+  "occupancy_pct": 68,
+  "signal_color": "Y",
+  "read_time": 1716389200000
+}</div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-anim"></div>
+            <div class="flow-arrow-label">TrafficAdapter</div>
+          </div>
+          <div class="flow-box flow-hub">
+            <div class="flow-box-title">Schema Canônico (TrafficData)</div>
+            <div class="flow-code">{
+  "sectionId": "AV-BRASIL-01",
+  "flowRate": 42,
+  "congestionLevel": 68,
+  "trafficLightStatus": "yellow",
+  "timestamp": "2024-05-22T..."
+}</div>
+          </div>
         </div>
-        <span class="badge badge-yellow">CSV</span>
+
+        <!-- Iluminação -->
+        <div class="flow-subsystem">
+          <div class="flow-label-row">
+            <span class="badge badge-yellow">💡 Iluminação</span>
+          </div>
+          <div class="flow-box">
+            <div class="flow-box-title">Formato bruto (CSV)</div>
+            <div class="flow-box-sub">Sistema legado envia:</div>
+            <div class="flow-code">ZONA-NORTE,75,1,120,1716389200000
+ZONA-SUL,50,0,98,1716389198000
+ZONA-CENTRO,90,1,210,1716389196000
+ZONA-LESTE,30,1,85,1716389194000</div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-anim"></div>
+            <div class="flow-arrow-label">LightingAdapter</div>
+          </div>
+          <div class="flow-box flow-hub">
+            <div class="flow-box-title">Schema Canônico (LightingData)</div>
+            <div class="flow-code">{
+  "zoneId": "ZONA-NORTE",
+  "intensityPercent": 75,
+  "autoMode": true,
+  "activeLamps": 120,
+  "timestamp": "2024-05-22T..."
+}</div>
+          </div>
+        </div>
+
+        <!-- Clima -->
+        <div class="flow-subsystem">
+          <div class="flow-label-row">
+            <span class="badge badge-purple">🌤️ Meteorologia</span>
+          </div>
+          <div class="flow-box">
+            <div class="flow-box-title">Formato bruto (XML)</div>
+            <div class="flow-box-sub">Estação meteorológica envia:</div>
+            <div class="flow-code">&lt;weather_report&gt;
+  &lt;temp_celsius&gt;27.4&lt;/temp_celsius&gt;
+  &lt;rain_mm_h&gt;0.0&lt;/rain_mm_h&gt;
+  &lt;solar_lux&gt;65000&lt;/solar_lux&gt;
+  &lt;sky_condition&gt;CLEAR&lt;/sky_condition&gt;
+&lt;/weather_report&gt;</div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-anim"></div>
+            <div class="flow-arrow-label">WeatherAdapter</div>
+          </div>
+          <div class="flow-box flow-hub">
+            <div class="flow-box-title">Schema Canônico (WeatherData)</div>
+            <div class="flow-code">{
+  "temperatureCelsius": 27.4,
+  "rainfallMmPerHour": 0.0,
+  "luminosityLevel": 65,
+  "condition": "clear",
+  "timestamp": "2024-05-22T..."
+}</div>
+          </div>
+        </div>
+
       </div>
-      <div id="lighting-list" class="loading">Carregando...</div>
     </div>
 
-    <!-- Clima -->
-    <div class="card" id="card-weather">
-      <div class="card-header">
-        <div class="card-title">
-          <div class="card-icon icon-weather">🌤️</div>
-          Meteorologia
+    <div class="separator"></div>
+
+    <!-- CityHub orquestrador -->
+    <div>
+      <div class="flow-section-title">CityHub — orquestrador central</div>
+      <div class="card">
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div style="display:flex;gap:32px;flex-wrap:wrap">
+
+            <div style="flex:1;min-width:240px">
+              <div class="section-label">Responsabilidades</div>
+              <div class="row"><span class="row-label">Normalização</span><span class="row-value">Converte todos os formatos para schema único</span></div>
+              <div class="row"><span class="row-label">Orquestração</span><span class="row-value">Chama adaptadores e agrega os dados</span></div>
+              <div class="row"><span class="row-label">Automação</span><span class="row-value">Ajusta iluminação via tráfego + clima</span></div>
+              <div class="row"><span class="row-label">Eventos</span><span class="row-value">Publica no EventBus a cada leitura</span></div>
+            </div>
+
+            <div style="flex:1;min-width:240px">
+              <div class="section-label">Regras de automação</div>
+              <div class="row"><span class="row-label">🌧️ Chuva / Tempestade</span><span class="row-value" style="color:var(--accent)">Iluminação → mín. 80%</span></div>
+              <div class="row"><span class="row-label">🚗 Congestionamento &gt;80%</span><span class="row-value" style="color:var(--accent)">Iluminação → 100%</span></div>
+              <div class="row"><span class="row-label">☀️ Luminosidade natural &gt;70</span><span class="row-value" style="color:var(--accent)">Reduz 20% da base</span></div>
+              <div class="row"><span class="row-label">🚦 Congestionamento &gt;70%</span><span class="row-value" style="color:var(--accent)">Adiciona +30% à base</span></div>
+            </div>
+
+          </div>
         </div>
-        <span class="badge badge-blue">XML</span>
       </div>
-      <div id="weather-content" class="loading">Carregando...</div>
     </div>
 
   </div>
 
-  <div class="footer">
-    Adriano Jr · João Márcio · Vinicius Barbosa &nbsp;|&nbsp; Projeto Smart Cities – Interoperabilidade Urbana
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ABA 3 — LOG DE EVENTOS                                                 -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panel-events" class="tab-panel">
+
+    <div class="event-log-header">
+      <div class="event-log-title">
+        <div class="card-icon icon-events" style="width:28px;height:28px;font-size:14px">📡</div>
+        EventBus — Fluxo de Mensagens em Tempo Real
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:11px;color:var(--muted)">Atualiza a cada 3s</span>
+        <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px" onclick="clearEvents()">Limpar tela</button>
+      </div>
+    </div>
+
+    <!-- Legenda -->
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></div> traffic:*
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--yellow)"></div> lighting:*
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--purple)"></div> weather:*
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div> auto-adjusted
+      </div>
+    </div>
+
+    <div id="events-container">
+      <div class="empty-state">Aguardando eventos do EventBus…</div>
+    </div>
+
   </div>
+
 </main>
+
+<footer>
+  Adriano Jr · João Márcio · Vinicius Barbosa &nbsp;·&nbsp;
+  Smart Cities — Interoperabilidade e Fragmentação de Sistemas Urbanos
+</footer>
 
 <div id="toast"></div>
 
+<!-- ── Scripts ───────────────────────────────────────────────────────────── -->
 <script>
-  const API = '';
+  // ── Tab navigation ─────────────────────────────────────────────────────────
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
 
-  // ── Utilitários ────────────────────────────────────────────────────────────
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function pct2color(pct) {
+    if (pct >= 75) return 'red';
+    if (pct >= 45) return 'yellow';
+    return 'green';
+  }
 
-  function congestionColor(pct) {
-    if (pct < 40) return 'green';
-    if (pct < 75) return 'yellow';
+  function int2color(pct) {
+    if (pct >= 65) return 'green';
+    if (pct >= 35) return 'yellow';
     return 'red';
   }
 
-  function intensityColor(pct) {
-    if (pct >= 70) return 'green';
-    if (pct >= 40) return 'yellow';
-    return 'red';
-  }
-
-  function conditionEmoji(c) {
-    return { clear: '☀️', cloudy: '⛅', rainy: '🌧️', stormy: '⛈️' }[c] ?? '🌡️';
-  }
-
-  function conditionLabel(c) {
-    return { clear: 'Céu Limpo', cloudy: 'Nublado', rainy: 'Chuva', stormy: 'Tempestade' }[c] ?? c;
-  }
+  const condEmoji  = { clear:'☀️', cloudy:'⛅', rainy:'🌧️', stormy:'⛈️' };
+  const condLabel  = { clear:'Céu Limpo', cloudy:'Nublado', rainy:'Chuva', stormy:'Tempestade' };
 
   function fmtTime(iso) {
-    return new Date(iso).toLocaleTimeString('pt-BR');
+    return new Date(iso).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
   }
 
-  function showToast(msg, ok = true) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.borderColor = ok ? 'var(--green)' : 'var(--red)';
-    t.style.color       = ok ? 'var(--green)' : 'var(--red)';
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+  function toast(msg, ok = true) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.style.borderColor = ok ? 'var(--green)' : 'var(--red)';
+    el.style.color       = ok ? 'var(--green)' : 'var(--red)';
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3500);
   }
 
-  // ── Renderizadores ─────────────────────────────────────────────────────────
-
+  // ── Render traffic ──────────────────────────────────────────────────────────
   function renderTraffic(list) {
     const el = document.getElementById('traffic-list');
     if (!list.length) { el.innerHTML = '<p class="loading">Sem dados</p>'; return; }
 
     el.innerHTML = list.map(s => {
-      const color = congestionColor(s.congestionLevel);
-      const tlMap = { green: [1,0,0], yellow: [0,1,0], red: [0,0,1] };
-      const [tg, ty, tr] = tlMap[s.trafficLightStatus] ?? [0,0,0];
+      const color = pct2color(s.congestionLevel);
+      const tls   = s.trafficLightStatus;
 
       return `
-        <div class="section-row">
-          <div class="section-top">
-            <span class="section-name">${s.sectionId}</span>
-            <div class="traffic-light">
-              <div class="tl-dot tl-red   ${tr ? 'active' : ''}"></div>
-              <div class="tl-dot tl-yellow ${ty ? 'active' : ''}"></div>
-              <div class="tl-dot tl-green  ${tg ? 'active' : ''}"></div>
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <div class="section-name">${s.sectionId}</div>
+              <div class="section-meta">${s.flowRate} veíc/min</div>
+            </div>
+            <div class="tl">
+              <div class="tl-dot tl-r ${tls==='red'?'on':''}"></div>
+              <div class="tl-dot tl-y ${tls==='yellow'?'on':''}"></div>
+              <div class="tl-dot tl-g ${tls==='green'?'on':''}"></div>
             </div>
           </div>
-          <div class="metric">
-            <span class="metric-label">Fluxo</span>
-            <span class="metric-value">${s.flowRate} veíc/min</span>
+          <div class="bar-label">
+            <span>Congestionamento</span><span>${s.congestionLevel}%</span>
           </div>
-          <div style="margin-top:.4rem">
-            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.3rem">
-              <span>Congestionamento</span><span>${s.congestionLevel}%</span>
-            </div>
-            <div class="bar-wrap">
-              <div class="bar-fill bar-${color}" style="width:${s.congestionLevel}%"></div>
-            </div>
+          <div class="bar-track">
+            <div class="bar-fill bar-${color}" style="width:${s.congestionLevel}%"></div>
           </div>
-          <p class="ts">Atualizado: ${fmtTime(s.timestamp)}</p>
+          <p class="ts">${fmtTime(s.timestamp)}</p>
         </div>`;
     }).join('');
   }
 
+  // ── Render lighting ─────────────────────────────────────────────────────────
   function renderLighting(list) {
-    const el = document.getElementById('lighting-list');
+    const el  = document.getElementById('lighting-list');
+    const sel = document.getElementById('zone-select');
+
     if (!list.length) { el.innerHTML = '<p class="loading">Sem dados</p>'; return; }
 
-    // Popula o select de zonas
-    const sel = document.getElementById('zone-select');
     const prev = sel.value;
     sel.innerHTML = list.map(z =>
-      `<option value="${z.zoneId}" ${z.zoneId === prev ? 'selected' : ''}>${z.zoneId}</option>`
+      `<option value="${z.zoneId}" ${z.zoneId===prev?'selected':''}>${z.zoneId}</option>`
     ).join('');
 
     el.innerHTML = list.map(z => {
-      const color = intensityColor(z.intensityPercent);
+      const color = int2color(z.intensityPercent);
       return `
-        <div class="zone-row">
-          <div class="zone-top">
-            <span class="zone-name">${z.zoneId}</span>
-            <span class="badge badge-${z.autoMode ? 'green' : 'yellow'}">
-              ${z.autoMode ? '🤖 Auto' : '✋ Manual'}
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <div class="section-name">${z.zoneId}</div>
+              <div class="section-meta">${z.activeLamps} luminárias ativas</div>
+            </div>
+            <span class="badge ${z.autoMode?'badge-green':'badge-yellow'}">
+              ${z.autoMode?'🤖 Auto':'✋ Manual'}
             </span>
           </div>
-          <div style="margin-bottom:.4rem">
-            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.3rem">
-              <span>Intensidade</span><span>${z.intensityPercent}%</span>
-            </div>
-            <div class="bar-wrap">
-              <div class="bar-fill bar-${color}" style="width:${z.intensityPercent}%"></div>
-            </div>
+          <div class="bar-label">
+            <span>Intensidade</span><span>${z.intensityPercent}%</span>
           </div>
-          <div class="metric">
-            <span class="metric-label">Luminárias ativas</span>
-            <span class="metric-value">${z.activeLamps}</span>
+          <div class="bar-track">
+            <div class="bar-fill bar-${color}" style="width:${z.intensityPercent}%"></div>
           </div>
-          <p class="ts">Atualizado: ${fmtTime(z.timestamp)}</p>
+          <p class="ts">${fmtTime(z.timestamp)}</p>
         </div>`;
     }).join('');
   }
 
+  // ── Render weather ──────────────────────────────────────────────────────────
   function renderWeather(w) {
-    const el = document.getElementById('weather-content');
-    const rainColor = w.rainfallMmPerHour > 5 ? 'red' : w.rainfallMmPerHour > 0 ? 'yellow' : 'green';
+    const el       = document.getElementById('weather-content');
+    const rainCol  = w.rainfallMmPerHour > 5 ? 'var(--red)' : w.rainfallMmPerHour > 0 ? 'var(--yellow)' : 'var(--green)';
 
     el.innerHTML = `
-      <div class="weather-big">
-        <div class="weather-emoji">${conditionEmoji(w.condition)}</div>
+      <div class="weather-hero">
+        <div class="weather-emoji">${condEmoji[w.condition] ?? '🌡️'}</div>
         <div>
           <div class="weather-temp">${w.temperatureCelsius}°C</div>
-          <div class="weather-cond">${conditionLabel(w.condition)}</div>
+          <div class="weather-cond">${condLabel[w.condition] ?? w.condition}</div>
         </div>
       </div>
-      <div class="metric">
-        <span class="metric-label">Precipitação</span>
-        <span class="metric-value" style="color:var(--${rainColor})">${w.rainfallMmPerHour} mm/h</span>
+      <div class="row">
+        <span class="row-label">Precipitação</span>
+        <span class="row-value" style="color:${rainCol}">${w.rainfallMmPerHour} mm/h</span>
       </div>
-      <div style="margin:.6rem 0">
-        <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.3rem">
+      <div style="margin:8px 0">
+        <div class="bar-label">
           <span>Luminosidade natural</span><span>${w.luminosityLevel}%</span>
         </div>
-        <div class="bar-wrap">
-          <div class="bar-fill bar-blue" style="width:${w.luminosityLevel}%"></div>
+        <div class="bar-track">
+          <div class="bar-fill bar-cyan" style="width:${w.luminosityLevel}%"></div>
         </div>
       </div>
-      <p class="ts">Atualizado: ${fmtTime(w.timestamp)}</p>`;
+      <p class="ts">${fmtTime(w.timestamp)}</p>`;
   }
 
-  // ── Fetch de dados ─────────────────────────────────────────────────────────
+  // ── Render events ───────────────────────────────────────────────────────────
+  let lastEventTimestamp = null;
+  let localEvents = [];
 
-  async function fetchAll() {
+  const EVENT_COLORS = {
+    'traffic':  'var(--accent)',
+    'lighting': 'var(--yellow)',
+    'weather':  'var(--purple)',
+    'auto':     'var(--green)',
+  };
+
+  function eventColor(name) {
+    if (name.startsWith('traffic'))  return EVENT_COLORS.traffic;
+    if (name.includes('auto'))       return EVENT_COLORS.auto;
+    if (name.startsWith('lighting')) return EVENT_COLORS.lighting;
+    if (name.startsWith('weather'))  return EVENT_COLORS.weather;
+    return 'var(--muted)';
+  }
+
+  function renderEvents(events) {
+    const container = document.getElementById('events-container');
+    if (!events.length) {
+      container.innerHTML = '<div class="empty-state">Nenhum evento registrado ainda.<br>Interaja com o dashboard para gerar eventos.</div>';
+      return;
+    }
+
+    container.innerHTML = events.map(ev => {
+      const color   = eventColor(ev.event);
+      const payload = JSON.stringify(ev.payload);
+      const preview = payload.length > 90 ? payload.slice(0, 87) + '…' : payload;
+
+      return `
+        <div class="event-item">
+          <div class="event-dot" style="background:${color};box-shadow:0 0 6px ${color}"></div>
+          <div class="event-content">
+            <div class="event-name" style="color:${color}">${ev.event}</div>
+            <div class="event-payload">${preview}</div>
+          </div>
+          <div class="event-time">${fmtTime(ev.timestamp)}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function clearEvents() {
+    document.getElementById('events-container').innerHTML =
+      '<div class="empty-state">Log limpo. Novos eventos aparecerão aqui.</div>';
+    localEvents = [];
+    lastEventTimestamp = null;
+  }
+
+  // ── Fetch status ────────────────────────────────────────────────────────────
+  async function fetchStatus() {
     try {
-      const res  = await fetch(`${API}/api/status`);
+      const res  = await fetch('/api/status');
       const json = await res.json();
       if (!json.success) return;
-
       renderTraffic(json.data.traffic);
       renderLighting(json.data.lighting);
       renderWeather(json.data.weather);
-
-      document.getElementById('last-sync').textContent =
-        'Sync: ' + new Date(json.data.lastSyncAt).toLocaleTimeString('pt-BR');
-    } catch (e) {
-      console.error(e);
-    }
+      document.getElementById('sync-time').textContent =
+        'Atualizado: ' + fmtTime(json.data.lastSyncAt);
+    } catch { /* silently ignore network errors */ }
   }
 
-  // ── Ajuste de iluminação ───────────────────────────────────────────────────
+  // ── Fetch events ────────────────────────────────────────────────────────────
+  async function fetchEvents() {
+    try {
+      const res  = await fetch('/api/events?limit=40');
+      const json = await res.json();
+      if (!json.success) return;
+      renderEvents(json.data);
+    } catch { /* silently ignore */ }
+  }
 
+  // ── Adjust lighting ─────────────────────────────────────────────────────────
   async function adjustLighting(auto = false) {
     const zoneId = document.getElementById('zone-select').value;
-    if (!zoneId) { showToast('Selecione uma zona.', false); return; }
+    if (!zoneId || zoneId === 'Aguardando dados…') {
+      toast('Aguarde os dados carregarem.', false);
+      return;
+    }
 
     const inputVal = document.getElementById('intensity-input').value;
-    const body = { zoneId };
+    const body     = { zoneId };
     if (!auto && inputVal !== '') body.targetIntensity = Number(inputVal);
 
     try {
-      const res  = await fetch(`${API}/api/lighting/adjust`, {
-        method: 'POST',
+      const res  = await fetch('/api/lighting/adjust', {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body:    JSON.stringify(body),
       });
       const json = await res.json();
 
       if (json.success) {
-        showToast(`✅ ${zoneId} → ${json.data.intensityPercent}% de intensidade`);
-        fetchAll();
+        toast(`✅ ${zoneId} → ${json.data.intensityPercent}% de intensidade`);
+        fetchStatus();
+        fetchEvents();
       } else {
-        showToast(`❌ ${json.error}`, false);
+        toast(`❌ ${json.error}`, false);
       }
-    } catch (e) {
-      showToast('❌ Erro de conexão com a API.', false);
+    } catch {
+      toast('❌ Sem conexão com a API.', false);
     }
   }
 
-  // ── Inicialização ──────────────────────────────────────────────────────────
-
-  fetchAll();
-  setInterval(fetchAll, 5000); // Atualiza a cada 5 segundos
+  // ── Init ────────────────────────────────────────────────────────────────────
+  fetchStatus();
+  fetchEvents();
+  setInterval(fetchStatus, 4000);
+  setInterval(fetchEvents, 3000);
 </script>
 </body>
 </html>

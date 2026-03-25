@@ -3,78 +3,69 @@
  *
  * Define todos os endpoints REST da API do middleware urbano.
  * Cada rota delega a lógica ao CityHub, mantendo os controllers
- * simples e focados apenas no protocolo HTTP.
+ * focados apenas no protocolo HTTP.
  */
 
 import { Router, Request, Response } from "express";
 import { CityHub } from "../core/CityHub";
+import { eventBus } from "../core/EventBus";
 import { LightingAdjustPayload } from "../models/CityDataSchema";
 
 const router = Router();
-const hub = new CityHub();
+const hub    = new CityHub();
 
-/**
- * GET /api/status
- * Retorna o estado consolidado de todos os subsistemas da cidade.
- */
+/** GET /api/status — estado consolidado de todos os subsistemas */
 router.get("/status", (_req: Request, res: Response) => {
   try {
-    const status = hub.getStatus();
-    res.json({ success: true, data: status });
-  } catch (err) {
+    res.json({ success: true, data: hub.getStatus() });
+  } catch {
     res.status(500).json({ success: false, error: "Erro ao obter status da cidade." });
   }
 });
 
-/**
- * GET /api/traffic
- * Retorna os dados de tráfego normalizados de todas as seções monitoradas.
- */
+/** GET /api/traffic — dados de tráfego normalizados */
 router.get("/traffic", (_req: Request, res: Response) => {
   try {
-    const traffic = hub.getTraffic();
-    res.json({ success: true, data: traffic });
-  } catch (err) {
+    res.json({ success: true, data: hub.getTraffic() });
+  } catch {
     res.status(500).json({ success: false, error: "Erro ao obter dados de tráfego." });
   }
 });
 
-/**
- * GET /api/lighting
- * Retorna os dados de iluminação normalizados de todas as zonas urbanas.
- */
+/** GET /api/lighting — dados de iluminação normalizados */
 router.get("/lighting", (_req: Request, res: Response) => {
   try {
-    const lighting = hub.getLighting();
-    res.json({ success: true, data: lighting });
-  } catch (err) {
+    res.json({ success: true, data: hub.getLighting() });
+  } catch {
     res.status(500).json({ success: false, error: "Erro ao obter dados de iluminação." });
   }
 });
 
-/**
- * GET /api/weather
- * Retorna os dados meteorológicos normalizados.
- */
+/** GET /api/weather — dados meteorológicos normalizados */
 router.get("/weather", (_req: Request, res: Response) => {
   try {
-    const weather = hub.getWeather();
-    res.json({ success: true, data: weather });
-  } catch (err) {
+    res.json({ success: true, data: hub.getWeather() });
+  } catch {
     res.status(500).json({ success: false, error: "Erro ao obter dados meteorológicos." });
   }
 });
 
 /**
- * POST /api/lighting/adjust
- * Ajusta a intensidade de iluminação de uma zona urbana.
+ * GET /api/events — histórico de eventos do EventBus
+ * Permite o dashboard exibir em tempo real as mensagens trocadas
+ * entre os subsistemas (Observer Pattern).
  *
- * Body (JSON):
- *   - zoneId: string (obrigatório)
- *   - targetIntensity?: number (0–100, opcional — se omitido, o hub calcula)
+ * Query param: ?limit=N (padrão 30)
+ */
+router.get("/events", (req: Request, res: Response) => {
+  const limit = Math.min(parseInt(String(req.query.limit ?? "30"), 10), 100);
+  res.json({ success: true, data: eventBus.getHistory(limit) });
+});
+
+/**
+ * POST /api/lighting/adjust — ajusta intensidade de uma zona
  *
- * Exemplo:
- *   { "zoneId": "ZONA-NORTE", "targetIntensity": 85 }
+ * Body: { zoneId: string, targetIntensity?: number }
  */
 router.post("/lighting/adjust", (req: Request, res: Response) => {
   try {
@@ -89,10 +80,7 @@ router.post("/lighting/adjust", (req: Request, res: Response) => {
       payload.targetIntensity !== undefined &&
       (payload.targetIntensity < 0 || payload.targetIntensity > 100)
     ) {
-      res.status(400).json({
-        success: false,
-        error: "targetIntensity deve estar entre 0 e 100.",
-      });
+      res.status(400).json({ success: false, error: "targetIntensity deve estar entre 0 e 100." });
       return;
     }
 

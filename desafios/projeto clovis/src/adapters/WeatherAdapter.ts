@@ -2,76 +2,87 @@
  * WeatherAdapter.ts
  *
  * Simula o Sistema Meteorológico de um terceiro fornecedor que entrega
- * dados em formato XML proprietário. Como não há um parser XML real aqui,
- * o XML é representado como um objeto estruturado que imita o que seria
- * obtido após o parsing (padrão comum com libs como xml2js).
+ * dados em formato XML proprietário. O XML é representado como um objeto
+ * estruturado que imita o resultado de um parser real (ex: xml2js).
  *
- * O adaptador converte esses dados para o schema canônico WeatherData.
+ * Os dados variam levemente a cada chamada para simular leituras reais
+ * de estações meteorológicas com atualização contínua.
  */
 
 import { WeatherData } from "../models/CityDataSchema";
 
-// ── Formato bruto simulando estrutura pós-parsing de XML ──────────────────────
-
 interface RawWeatherXml {
   weather_report: {
-    temp_celsius: string;        // vem como string no XML
-    rain_mm_h: string;
-    solar_lux: string;           // luminosidade bruta em lux (0–100000)
-    sky_condition: string;       // "CLEAR" | "CLOUD" | "RAIN" | "STORM"
-    generated_at: string;        // ISO 8601 string
+    temp_celsius:  string;
+    rain_mm_h:     string;
+    solar_lux:     string;
+    sky_condition: string;
+    generated_at:  string;
   };
 }
 
-// Mock: simula o objeto retornado pelo parser XML
+function jitter(range: number): number {
+  return parseFloat(((Math.random() - 0.5) * 2 * range).toFixed(1));
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+/**
+ * Deriva a condição do céu com base nos valores de chuva e luminosidade,
+ * simulando a lógica de classificação de uma estação meteorológica.
+ */
+function deriveCondition(rainMm: number, lux: number): string {
+  if (rainMm > 10) return "STORM";
+  if (rainMm > 0)  return "RAIN";
+  if (lux < 30000) return "CLOUD";
+  return "CLEAR";
+}
+
+// Estado base da estação meteorológica
+let baseTemp  = 27.4;
+let baseRain  = 0.0;
+let baseLux   = 65000;
+
 function fetchRawXmlWeather(): RawWeatherXml {
+  const temp = clamp(baseTemp  + jitter(1.5), -10, 50);
+  const rain = clamp(baseRain  + jitter(0.5),   0, 60);
+  const lux  = clamp(baseLux   + jitter(5000),  0, 100000);
+
   return {
     weather_report: {
-      temp_celsius: "27.4",
-      rain_mm_h: "0.0",
-      solar_lux: "65000",
-      sky_condition: "CLEAR",
-      generated_at: new Date(Date.now() - 10000).toISOString(),
+      temp_celsius:  temp.toFixed(1),
+      rain_mm_h:     rain.toFixed(1),
+      solar_lux:     lux.toFixed(0),
+      sky_condition: deriveCondition(rain, lux),
+      generated_at:  new Date().toISOString(),
     },
   };
 }
 
-// Mapeamento entre códigos do fornecedor e o schema canônico
 const conditionMap: Record<string, WeatherData["condition"]> = {
   CLEAR: "clear",
   CLOUD: "cloudy",
-  RAIN: "rainy",
+  RAIN:  "rainy",
   STORM: "stormy",
 };
 
-/**
- * Normaliza lux bruto (0–100000) para escala 0–100.
- * Valores acima de 100000 lux são mapeados para 100.
- */
 function normalizeLux(rawLux: number): number {
   return Math.min(100, Math.round((rawLux / 100000) * 100));
 }
 
-/**
- * WeatherAdapter
- *
- * Responsabilidade única: buscar o XML meteorológico e convertê-lo
- * para o formato canônico WeatherData.
- */
 export class WeatherAdapter {
-  /**
-   * Retorna os dados meteorológicos normalizados.
-   */
   getData(): WeatherData {
-    const raw = fetchRawXmlWeather();
+    const raw    = fetchRawXmlWeather();
     const report = raw.weather_report;
 
     return {
       temperatureCelsius: parseFloat(report.temp_celsius),
-      rainfallMmPerHour: parseFloat(report.rain_mm_h),
-      luminosityLevel: normalizeLux(parseFloat(report.solar_lux)),
-      condition: conditionMap[report.sky_condition] ?? "clear",
-      timestamp: report.generated_at,
+      rainfallMmPerHour:  parseFloat(report.rain_mm_h),
+      luminosityLevel:    normalizeLux(parseFloat(report.solar_lux)),
+      condition:          conditionMap[report.sky_condition] ?? "clear",
+      timestamp:          report.generated_at,
     };
   }
 }
