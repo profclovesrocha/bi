@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart City Dashboard</title>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --panel: #111827;
+      --border: #1e2d45;
+      --accent: #00d4ff;
+      --accent2: #7c3aed;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0a0e1a 0%, #111827 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .logo h1 { font-size: 1.25rem; font-weight: 700; }
+    .logo p  { font-size: .75rem; color: var(--muted); }
+
+    .status-bar {
+      display: flex; align-items: center; gap: 1.5rem;
+      font-size: .8rem; color: var(--muted);
+    }
+
+    .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .4; }
+    }
+
+    /* ── Layout ── */
+    main { padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+
+    .card:hover { border-color: var(--accent); }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .95rem; font-weight: 600;
+    }
+
+    .card-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+
+    .icon-traffic  { background: rgba(0,212,255,.15); }
+    .icon-light    { background: rgba(245,158,11,.15); }
+    .icon-weather  { background: rgba(124,58,237,.15); }
+
+    .badge {
+      font-size: .7rem; padding: .2rem .6rem;
+      border-radius: 999px; font-weight: 600;
+    }
+
+    .badge-green  { background: rgba(16,185,129,.15); color: var(--green); }
+    .badge-yellow { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .badge-red    { background: rgba(239,68,68,.15);   color: var(--red); }
+    .badge-blue   { background: rgba(0,212,255,.15);   color: var(--accent); }
+
+    /* ── Métricas ── */
+    .metric {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .85rem;
+    }
+
+    .metric:last-child { border-bottom: none; }
+    .metric-label { color: var(--muted); }
+    .metric-value { font-weight: 600; }
+
+    /* ── Barra de progresso ── */
+    .bar-wrap {
+      background: var(--border);
+      border-radius: 999px;
+      height: 6px;
+      margin-top: .3rem;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width .8s ease;
+    }
+
+    .bar-green  { background: linear-gradient(90deg, #10b981, #34d399); }
+    .bar-yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .bar-red    { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .bar-blue   { background: linear-gradient(90deg, #00d4ff, #7c3aed); }
+
+    /* ── Semáforo ── */
+    .traffic-light {
+      display: flex; gap: .4rem; align-items: center;
+    }
+
+    .tl-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      opacity: .2;
+    }
+
+    .tl-dot.active { opacity: 1; box-shadow: 0 0 8px currentColor; }
+    .tl-red    { background: var(--red);    color: var(--red); }
+    .tl-yellow { background: var(--yellow); color: var(--yellow); }
+    .tl-green  { background: var(--green);  color: var(--green); }
+
+    /* ── Seção de tráfego (lista) ── */
+    .section-row {
+      padding: .7rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-row:last-child { border-bottom: none; }
+
+    .section-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: .4rem;
+    }
+
+    .section-name { font-size: .85rem; font-weight: 600; }
+
+    /* ── Zonas de iluminação ── */
+    .zone-row {
+      padding: .7rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .zone-row:last-child { border-bottom: none; }
+
+    .zone-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: .4rem;
+    }
+
+    .zone-name { font-size: .85rem; font-weight: 600; }
+
+    /* ── Painel de ajuste ── */
+    .adjust-panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .adjust-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .adjust-title {
+      font-size: .95rem; font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+
+    .form-row {
+      display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-label { font-size: .75rem; color: var(--muted); }
+
+    .form-select, .form-input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: .55rem .9rem;
+      font-size: .85rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .form-select:focus, .form-input:focus { border-color: var(--accent); }
+
+    .btn {
+      padding: .55rem 1.4rem;
+      border-radius: 8px;
+      border: none;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+    }
+
+    .btn:hover   { opacity: .85; }
+    .btn:active  { transform: scale(.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+
+    .btn-auto {
+      background: rgba(16,185,129,.15);
+      color: var(--green);
+      border: 1px solid rgba(16,185,129,.3);
+    }
+
+    /* ── Toast de feedback ── */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--panel);
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .85rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .3s;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Rodapé ── */
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: .75rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+
+    /* ── Clima destaque ── */
+    .weather-big {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .weather-emoji { font-size: 3rem; line-height: 1; }
+
+    .weather-temp {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .weather-cond {
+      font-size: .85rem; color: var(--muted); margin-top: .2rem;
+    }
+
+    /* ── Timestamp ── */
+    .ts { font-size: .7rem; color: var(--muted); margin-top: .5rem; }
+
+    /* ── Loading ── */
+    .loading {
+      color: var(--muted); font-size: .85rem;
+      padding: 1rem 0; text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      main { padding: 1rem; }
+      header { padding: 1rem; }
+      .form-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏙️</div>
+    <div>
+      <h1>Smart City Dashboard</h1>
+      <p>Middleware de Integração Urbana</p>
+    </div>
+  </div>
+  <div class="status-bar">
+    <div class="live-dot"></div>
+    <span>AO VIVO</span>
+    <span id="last-sync">–</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Painel de ajuste ── -->
+  <div class="adjust-panel" style="position:relative">
+    <div class="adjust-title">⚙️ Ajuste de Iluminação</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Zona</label>
+        <select id="zone-select" class="form-select">
+          <option value="">Carregando...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Intensidade (0–100) — deixe vazio para automático</label>
+        <input id="intensity-input" type="number" min="0" max="100"
+               placeholder="Automático" class="form-input" style="width:220px" />
+      </div>
+      <button class="btn btn-primary" onclick="adjustLighting()">Aplicar</button>
+      <button class="btn btn-auto" onclick="adjustLighting(true)">🤖 Ajuste Automático</button>
+    </div>
+  </div>
+
+  <!-- ── Tráfego + Clima ── -->
+  <div class="grid-3">
+
+    <!-- Tráfego -->
+    <div class="card" id="card-traffic">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon icon-traffic">🚦</div>
+          Sistema de Tráfego
+        </div>
+        <span class="badge badge-blue">JSON</span>
+      </div>
+      <div id="traffic-list" class="loading">Carregando...</div>
+    </div>
+
+    <!-- Iluminação -->
+    <div class="card" id="card-lighting">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon icon-light">💡</div>
+          Iluminação Pública
+        </div>
+        <span class="badge badge-yellow">CSV</span>
+      </div>
+      <div id="lighting-list" class="loading">Carregando...</div>
+    </div>
+
+    <!-- Clima -->
+    <div class="card" id="card-weather">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon icon-weather">🌤️</div>
+          Meteorologia
+        </div>
+        <span class="badge badge-blue">XML</span>
+      </div>
+      <div id="weather-content" class="loading">Carregando...</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Adriano Jr · João Márcio · Vinicius Barbosa &nbsp;|&nbsp; Projeto Smart Cities – Interoperabilidade Urbana
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+  const API = '';
+
+  // ── Utilitários ────────────────────────────────────────────────────────────
+
+  function congestionColor(pct) {
+    if (pct < 40) return 'green';
+    if (pct < 75) return 'yellow';
+    return 'red';
+  }
+
+  function intensityColor(pct) {
+    if (pct >= 70) return 'green';
+    if (pct >= 40) return 'yellow';
+    return 'red';
+  }
+
+  function conditionEmoji(c) {
+    return { clear: '☀️', cloudy: '⛅', rainy: '🌧️', stormy: '⛈️' }[c] ?? '🌡️';
+  }
+
+  function conditionLabel(c) {
+    return { clear: 'Céu Limpo', cloudy: 'Nublado', rainy: 'Chuva', stormy: 'Tempestade' }[c] ?? c;
+  }
+
+  function fmtTime(iso) {
+    return new Date(iso).toLocaleTimeString('pt-BR');
+  }
+
+  function showToast(msg, ok = true) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.borderColor = ok ? 'var(--green)' : 'var(--red)';
+    t.style.color       = ok ? 'var(--green)' : 'var(--red)';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Renderizadores ─────────────────────────────────────────────────────────
+
+  function renderTraffic(list) {
+    const el = document.getElementById('traffic-list');
+    if (!list.length) { el.innerHTML = '<p class="loading">Sem dados</p>'; return; }
+
+    el.innerHTML = list.map(s => {
+      const color = congestionColor(s.congestionLevel);
+      const tlMap = { green: [1,0,0], yellow: [0,1,0], red: [0,0,1] };
+      const [tg, ty, tr] = tlMap[s.trafficLightStatus] ?? [0,0,0];
+
+      return `
+        <div class="section-row">
+          <div class="section-top">
+            <span class="section-name">${s.sectionId}</span>
+            <div class="traffic-light">
+              <div class="tl-dot tl-red   ${tr ? 'active' : ''}"></div>
+              <div class="tl-dot tl-yellow ${ty ? 'active' : ''}"></div>
+              <div class="tl-dot tl-green  ${tg ? 'active' : ''}"></div>
+            </div>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Fluxo</span>
+            <span class="metric-value">${s.flowRate} veíc/min</span>
+          </div>
+          <div style="margin-top:.4rem">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.3rem">
+              <span>Congestionamento</span><span>${s.congestionLevel}%</span>
+            </div>
+            <div class="bar-wrap">
+              <div class="bar-fill bar-${color}" style="width:${s.congestionLevel}%"></div>
+            </div>
+          </div>
+          <p class="ts">Atualizado: ${fmtTime(s.timestamp)}</p>
+        </div>`;
+    }).join('');
+  }
+
+  function renderLighting(list) {
+    const el = document.getElementById('lighting-list');
+    if (!list.length) { el.innerHTML = '<p class="loading">Sem dados</p>'; return; }
+
+    // Popula o select de zonas
+    const sel = document.getElementById('zone-select');
+    const prev = sel.value;
+    sel.innerHTML = list.map(z =>
+      `<option value="${z.zoneId}" ${z.zoneId === prev ? 'selected' : ''}>${z.zoneId}</option>`
+    ).join('');
+
+    el.innerHTML = list.map(z => {
+      const color = intensityColor(z.intensityPercent);
+      return `
+        <div class="zone-row">
+          <div class="zone-top">
+            <span class="zone-name">${z.zoneId}</span>
+            <span class="badge badge-${z.autoMode ? 'green' : 'yellow'}">
+              ${z.autoMode ? '🤖 Auto' : '✋ Manual'}
+            </span>
+          </div>
+          <div style="margin-bottom:.4rem">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.3rem">
+              <span>Intensidade</span><span>${z.intensityPercent}%</span>
+            </div>
+            <div class="bar-wrap">
+              <div class="bar-fill bar-${color}" style="width:${z.intensityPercent}%"></div>
+            </div>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Luminárias ativas</span>
+            <span class="metric-value">${z.activeLamps}</span>
+          </div>
+          <p class="ts">Atualizado: ${fmtTime(z.timestamp)}</p>
+        </div>`;
+    }).join('');
+  }
+
+  function renderWeather(w) {
+    const el = document.getElementById('weather-content');
+    const rainColor = w.rainfallMmPerHour > 5 ? 'red' : w.rainfallMmPerHour > 0 ? 'yellow' : 'green';
+
+    el.innerHTML = `
+      <div class="weather-big">
+        <div class="weather-emoji">${conditionEmoji(w.condition)}</div>
+        <div>
+          <div class="weather-temp">${w.temperatureCelsius}°C</div>
+          <div class="weather-cond">${conditionLabel(w.condition)}</div>
+        </div>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Precipitação</span>
+        <span class="metric-value" style="color:var(--${rainColor})">${w.rainfallMmPerHour} mm/h</span>
+      </div>
+      <div style="margin:.6rem 0">
+        <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.3rem">
+          <span>Luminosidade natural</span><span>${w.luminosityLevel}%</span>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-fill bar-blue" style="width:${w.luminosityLevel}%"></div>
+        </div>
+      </div>
+      <p class="ts">Atualizado: ${fmtTime(w.timestamp)}</p>`;
+  }
+
+  // ── Fetch de dados ─────────────────────────────────────────────────────────
+
+  async function fetchAll() {
+    try {
+      const res  = await fetch(`${API}/api/status`);
+      const json = await res.json();
+      if (!json.success) return;
+
+      renderTraffic(json.data.traffic);
+      renderLighting(json.data.lighting);
+      renderWeather(json.data.weather);
+
+      document.getElementById('last-sync').textContent =
+        'Sync: ' + new Date(json.data.lastSyncAt).toLocaleTimeString('pt-BR');
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // ── Ajuste de iluminação ───────────────────────────────────────────────────
+
+  async function adjustLighting(auto = false) {
+    const zoneId = document.getElementById('zone-select').value;
+    if (!zoneId) { showToast('Selecione uma zona.', false); return; }
+
+    const inputVal = document.getElementById('intensity-input').value;
+    const body = { zoneId };
+    if (!auto && inputVal !== '') body.targetIntensity = Number(inputVal);
+
+    try {
+      const res  = await fetch(`${API}/api/lighting/adjust`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        showToast(`✅ ${zoneId} → ${json.data.intensityPercent}% de intensidade`);
+        fetchAll();
+      } else {
+        showToast(`❌ ${json.error}`, false);
+      }
+    } catch (e) {
+      showToast('❌ Erro de conexão com a API.', false);
+    }
+  }
+
+  // ── Inicialização ──────────────────────────────────────────────────────────
+
+  fetchAll();
+  setInterval(fetchAll, 5000); // Atualiza a cada 5 segundos
+</script>
+</body>
+</html>
