@@ -1,5 +1,5 @@
 # Smart City Middleware
-
+adriano jr, joao marcio
 Middleware de integração urbana que conecta sistemas heterogêneos de uma cidade inteligente por meio de APIs padronizadas, abordando o desafio de **Interoperabilidade e Fragmentação** em Smart Cities.
 
 ## Problema
