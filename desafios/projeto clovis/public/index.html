@@ -3,909 +3,1287 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart City Dashboard</title>
+  <title>Smart City · Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    /* ── Reset & Variáveis ───────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:      #060b16;
-      --surface: #0d1524;
-      --panel:   #111d2e;
-      --border:  #1a2d45;
-      --accent:  #00c8f8;
-      --purple:  #7c3aed;
-      --green:   #10b981;
-      --yellow:  #f59e0b;
-      --red:     #ef4444;
-      --orange:  #f97316;
-      --text:    #e2e8f0;
-      --muted:   #5a7290;
-      --radius:  12px;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      font-size: 14px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── Header ──────────────────────────────────────────────────────── */
-    header {
-      background: linear-gradient(180deg, #0a1220 0%, var(--bg) 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      backdrop-filter: blur(10px);
-    }
-
-    .logo { display: flex; align-items: center; gap: 12px; }
-
-    .logo-badge {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
-      border-radius: 11px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 24px rgba(0,200,248,.25);
-    }
-
-    .logo-text h1 { font-size: 16px; font-weight: 700; letter-spacing: .3px; }
-    .logo-text p  { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-    .header-right { display: flex; align-items: center; gap: 20px; }
-
-    .live-pill {
-      display: flex; align-items: center; gap: 7px;
-      background: rgba(16,185,129,.08);
-      border: 1px solid rgba(16,185,129,.25);
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 11px;
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-      animation: blink 2s infinite;
-    }
-
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-    #sync-time { font-size: 11px; color: var(--muted); }
-
-    /* ── Tabs ────────────────────────────────────────────────────────── */
-    .tabs {
-      display: flex;
-      gap: 2px;
-      padding: 0 28px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab {
-      padding: 13px 20px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: color .2s, border-color .2s;
-      display: flex; align-items: center; gap: 7px;
-      user-select: none;
-    }
-
-    .tab:hover   { color: var(--text); }
-    .tab.active  {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    /* ── Main layout ─────────────────────────────────────────────────── */
-    main { flex: 1; padding: 20px 28px; max-width: 1440px; width: 100%; margin: 0 auto; }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── Grid helpers ────────────────────────────────────────────────── */
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    @media (max-width: 1100px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 700px)  { .grid-3 { grid-template-columns: 1fr; } }
-
-    /* ── Card base ───────────────────────────────────────────────────── */
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .card:hover {
-      border-color: rgba(0,200,248,.35);
-      box-shadow: 0 0 20px rgba(0,200,248,.06);
-    }
-
-    .card-stripe {
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--purple));
-    }
-
-    .card-stripe.green  { background: linear-gradient(90deg, #10b981, #34d399); }
-    .card-stripe.yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .card-stripe.purple { background: linear-gradient(90deg, var(--purple), #a855f7); }
-
-    .card-body { padding: 16px; }
-
-    .card-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      display: flex; align-items: center; gap: 9px;
-      font-size: 13px; font-weight: 600;
-    }
-
-    .card-icon {
-      width: 30px; height: 30px;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-    }
-
-    .icon-traffic  { background: rgba(0,200,248,.12); }
-    .icon-light    { background: rgba(245,158,11,.12); }
-    .icon-weather  { background: rgba(124,58,237,.12); }
-    .icon-events   { background: rgba(16,185,129,.12); }
-    .icon-flow     { background: rgba(239,68,68,.12); }
-
-    /* ── Badge ───────────────────────────────────────────────────────── */
-    .badge {
-      font-size: 10px; font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 999px;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-    }
-
-    .badge-cyan   { background: rgba(0,200,248,.12);  color: var(--accent); border: 1px solid rgba(0,200,248,.2); }
-    .badge-yellow { background: rgba(245,158,11,.12); color: var(--yellow); border: 1px solid rgba(245,158,11,.2); }
-    .badge-purple { background: rgba(124,58,237,.12); color: #a78bfa;       border: 1px solid rgba(124,58,237,.2); }
-    .badge-green  { background: rgba(16,185,129,.12); color: var(--green);  border: 1px solid rgba(16,185,129,.2); }
-    .badge-red    { background: rgba(239,68,68,.12);  color: var(--red);    border: 1px solid rgba(239,68,68,.2); }
-    .badge-orange { background: rgba(249,115,22,.12); color: var(--orange); border: 1px solid rgba(249,115,22,.2); }
-
-    /* ── Divider row ─────────────────────────────────────────────────── */
-    .row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(26,45,69,.8);
-      font-size: 13px;
-    }
-
-    .row:last-child { border-bottom: none; }
-    .row-label { color: var(--muted); }
-    .row-value { font-weight: 600; }
-
-    /* ── Progress bar ────────────────────────────────────────────────── */
-    .bar-track {
-      background: rgba(26,45,69,.9);
-      border-radius: 999px;
-      height: 5px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width .8s cubic-bezier(.4,0,.2,1);
-    }
-
-    .bar-green  { background: linear-gradient(90deg, #10b981, #34d399); }
-    .bar-yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .bar-red    { background: linear-gradient(90deg, #ef4444, #f87171); }
-    .bar-cyan   { background: linear-gradient(90deg, var(--accent), var(--purple)); }
-
-    /* ── Traffic light indicator ─────────────────────────────────────── */
-    .tl {
-      display: flex; gap: 5px; align-items: center;
-    }
-
-    .tl-dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      opacity: .15;
-      transition: opacity .3s, box-shadow .3s;
-    }
-
-    .tl-dot.on { opacity: 1; }
-
-    .tl-r { background: var(--red);    }
-    .tl-y { background: var(--yellow); }
-    .tl-g { background: var(--green);  }
-    .tl-r.on { box-shadow: 0 0 8px var(--red);    }
-    .tl-y.on { box-shadow: 0 0 8px var(--yellow); }
-    .tl-g.on { box-shadow: 0 0 8px var(--green);  }
-
-    /* ── Section/Zone blocks ─────────────────────────────────────────── */
-    .section {
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(26,45,69,.8);
-    }
-
-    .section:last-child { border-bottom: none; }
-
-    .section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .section-name { font-weight: 600; font-size: 13px; }
-    .section-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    .bar-label {
-      display: flex; justify-content: space-between;
-      font-size: 11px; color: var(--muted); margin-bottom: 4px;
-    }
-
-    /* ── Weather big display ─────────────────────────────────────────── */
-    .weather-hero {
-      display: flex; align-items: center; gap: 14px;
-      margin-bottom: 14px;
-      padding: 12px;
-      background: rgba(0,0,0,.2);
-      border-radius: 10px;
-    }
-
-    .weather-emoji { font-size: 48px; line-height: 1; }
-
-    .weather-temp {
-      font-size: 38px; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; line-height: 1;
-    }
-
-    .weather-cond { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-    /* ── Adjust panel ────────────────────────────────────────────────── */
-    .adjust-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .adjust-title {
-      font-size: 13px; font-weight: 600;
-      margin-bottom: 14px;
-      display: flex; align-items: center; gap: 8px; color: var(--text);
-    }
-
-    .form-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
-
-    .field { display: flex; flex-direction: column; gap: 5px; }
-    .field label { font-size: 11px; color: var(--muted); font-weight: 500; }
-
-    .field select,
-    .field input {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      padding: 8px 12px;
-      font-size: 13px;
-      outline: none;
-      transition: border-color .2s;
-    }
-
-    .field select:focus,
-    .field input:focus { border-color: var(--accent); }
-
-    .btn {
-      padding: 8px 18px;
-      border-radius: 8px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity .15s, transform .1s;
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    .btn:hover  { opacity: .85; }
-    .btn:active { transform: scale(.97); }
-
-    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--purple)); color: #fff; }
-    .btn-ghost   { background: rgba(16,185,129,.1); color: var(--green); border: 1px solid rgba(16,185,129,.25); }
-
-    /* ── Toast ───────────────────────────────────────────────────────── */
-    #toast {
-      position: fixed; bottom: 24px; right: 24px;
-      background: var(--panel);
-      border: 1px solid var(--green);
-      color: var(--green);
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all .25s;
-      z-index: 999;
-      pointer-events: none;
-      max-width: 320px;
-    }
-
-    #toast.show { opacity: 1; transform: translateY(0); }
-
-    /* ────────────────────────────────────────────────────────────────── */
-    /* ABA 2 — FLUXO DE DADOS                                            */
-    /* ────────────────────────────────────────────────────────────────── */
-
-    .flow-page { display: flex; flex-direction: column; gap: 20px; }
-
-    .flow-section-title {
-      font-size: 12px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .flow-pipeline {
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .flow-box {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      min-width: 200px;
-      flex-shrink: 0;
-    }
-
-    .flow-box-title {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .6px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .flow-box-sub {
-      font-size: 12px; font-weight: 600; margin-bottom: 6px;
-    }
-
-    .flow-code {
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 11px;
-      color: #7dd3fc;
-      background: rgba(0,0,0,.35);
-      border-radius: 6px;
-      padding: 8px 10px;
-      line-height: 1.6;
-      white-space: pre;
-      overflow-x: auto;
-    }
-
-    .flow-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 0 6px;
-      flex-shrink: 0;
-      gap: 4px;
-    }
-
-    .flow-arrow-line {
-      flex: 1;
-      display: flex;
-      align-items: center;
-    }
-
-    .arrow-svg { color: var(--accent); }
-
-    .flow-arrow-label {
-      font-size: 9px;
-      color: var(--muted);
-      text-align: center;
-      font-weight: 600;
-      letter-spacing: .3px;
-      white-space: nowrap;
-    }
-
-    .flow-arrow-anim {
-      width: 60px;
-      height: 6px;
-      position: relative;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(0,200,248,.08);
-    }
-
-    .flow-arrow-anim::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -40px;
-      width: 40px; height: 100%;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      animation: flow 1.4s linear infinite;
-    }
-
-    @keyframes flow { to { left: 100%; } }
-
-    .flow-hub {
-      background: linear-gradient(135deg, rgba(0,200,248,.08), rgba(124,58,237,.08));
-      border: 1px solid rgba(0,200,248,.25);
-      box-shadow: 0 0 30px rgba(0,200,248,.06);
-    }
-
-    .flow-hub .flow-box-sub { color: var(--accent); }
-
-    .flow-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 900px) { .flow-grid { grid-template-columns: 1fr; } }
-
-    .flow-subsystem {
-      display: flex; flex-direction: column; gap: 0;
-    }
-
-    .flow-label-row {
-      display: flex; gap: 6px; align-items: center; margin-bottom: 8px;
-    }
-
-    /* ── Pattern card ─────────────────────────────────────────────────── */
-    .pattern-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
-
-    .pattern-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-    }
-
-    .pattern-icon { font-size: 22px; margin-bottom: 8px; }
-    .pattern-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-    .pattern-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-
-    /* ────────────────────────────────────────────────────────────────── */
-    /* ABA 3 — LOG DE EVENTOS                                            */
-    /* ────────────────────────────────────────────────────────────────── */
-
-    .event-log-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .event-log-title {
-      font-size: 13px; font-weight: 600;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    #events-container {
-      display: flex; flex-direction: column; gap: 6px;
-    }
-
-    .event-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 10px 14px;
-      animation: slideIn .25s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .event-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      margin-top: 3px; flex-shrink: 0;
-    }
-
-    .event-content { flex: 1; min-width: 0; }
-
-    .event-name {
-      font-size: 12px; font-weight: 700;
-      font-family: 'Cascadia Code', 'Consolas', monospace;
-      margin-bottom: 3px;
-    }
-
-    .event-payload {
-      font-size: 11px; color: var(--muted);
-      font-family: 'Cascadia Code', 'Consolas', monospace;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    .event-time {
-      font-size: 11px; color: var(--muted);
-      white-space: nowrap; flex-shrink: 0;
-    }
-
-    .empty-state {
-      text-align: center; padding: 40px 0;
-      color: var(--muted); font-size: 13px;
-    }
-
-    /* ── Footer ──────────────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 14px 28px;
-      color: var(--muted);
-      font-size: 11px;
-      border-top: 1px solid var(--border);
-      margin-top: auto;
-    }
-
-    /* ── Misc ────────────────────────────────────────────────────────── */
-    .ts { font-size: 10px; color: var(--muted); margin-top: 6px; }
-    .loading { color: var(--muted); text-align: center; padding: 20px 0; font-size: 13px; }
-
-    .separator { height: 1px; background: var(--border); margin: 14px 0; }
-
-    .section-label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .8px; color: var(--muted); margin-bottom: 10px;
-    }
+/* ═══════════════════════════════════════════════════════════════
+   RESET & VARIÁVEIS
+═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #020917;
+  --surface:  #060f1e;
+  --panel:    #0a1628;
+  --glass:    rgba(10,22,40,.75);
+  --border:   #0f2340;
+  --border2:  #1a3a5c;
+  --cyan:     #00d4ff;
+  --cyan2:    #00aacc;
+  --purple:   #8b5cf6;
+  --purple2:  #6d28d9;
+  --green:    #10b981;
+  --yellow:   #f59e0b;
+  --red:      #ef4444;
+  --orange:   #f97316;
+  --text:     #e2e8f0;
+  --muted:    #4a6580;
+  --r:        12px;
+  --scan: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0,212,255,.04) 50%,
+    transparent 100%
+  );
+}
+
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATED GRID BACKGROUND
+═══════════════════════════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.035) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridShift 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes gridShift {
+  from { background-position: 0 0; }
+  to   { background-position: 60px 60px; }
+}
+
+body > * { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════════════════ */
+header {
+  background: linear-gradient(180deg, rgba(2,9,23,1) 0%, rgba(6,15,30,.95) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  backdrop-filter: blur(20px);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 62px;
+}
+
+.logo { display: flex; align-items: center; gap: 12px; }
+
+.logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 20px rgba(0,212,255,.35), 0 0 40px rgba(139,92,246,.2);
+}
+
+.logo-text h1 { font-size: 16px; font-weight: 700; letter-spacing: .3px; }
+.logo-text p  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.header-right { display: flex; align-items: center; gap: 18px; }
+
+.clock {
+  font-size: 18px; font-weight: 700;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0,212,255,.5);
+  letter-spacing: 2px;
+}
+
+.live-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.3);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 11px; font-weight: 700;
+  color: var(--green);
+  letter-spacing: .5px;
+}
+
+.pulse-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(.6); opacity: .4; }
+}
+
+/* Skyline SVG */
+.skyline {
+  width: 100%; height: 18px;
+  opacity: .18;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════════════ */
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 28px;
+  background: rgba(6,15,30,.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.tab {
+  padding: 13px 20px;
+  font-size: 12px; font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+  display: flex; align-items: center; gap: 7px;
+  user-select: none;
+  letter-spacing: .3px;
+}
+
+.tab:hover  { color: var(--text); }
+.tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════════════════ */
+main { flex: 1; padding: 18px 28px 24px; }
+
+.tab-panel          { display: none; }
+.tab-panel.active   { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════
+   GLASS CARD
+═══════════════════════════════════════════════════════════════ */
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  position: relative;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+.card:hover {
+  border-color: rgba(0,212,255,.3);
+  box-shadow: 0 0 24px rgba(0,212,255,.06), 0 4px 30px rgba(0,0,0,.4);
+}
+
+/* Top colored stripe */
+.stripe        { height: 2px; }
+.stripe-cyan   { background: linear-gradient(90deg, var(--cyan), var(--purple)); }
+.stripe-green  { background: linear-gradient(90deg, var(--green), #34d399); }
+.stripe-yellow { background: linear-gradient(90deg, var(--yellow), #fbbf24); }
+.stripe-purple { background: linear-gradient(90deg, var(--purple), #c084fc); }
+.stripe-red    { background: linear-gradient(90deg, var(--red), #f87171); }
+
+/* Scan line animation on card */
+.card::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0; right: 0;
+  height: 100%;
+  background: var(--scan);
+  animation: scanLine 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanLine {
+  from { top: -100%; }
+  to   { top:  200%; }
+}
+
+.card-body { padding: 16px; }
+
+.card-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.card-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KPI ROW
+═══════════════════════════════════════════════════════════════ */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1000px) { .kpi-row { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px)  { .kpi-row { grid-template-columns: 1fr; } }
+
+.kpi-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color .25s, transform .2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card:hover {
+  border-color: rgba(0,212,255,.25);
+  transform: translateY(-2px);
+}
+
+.kpi-glow {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  opacity: .12;
+  filter: blur(24px);
+  right: -10px; top: -10px;
+}
+
+.kpi-icon-wrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.kpi-info { flex: 1; min-width: 0; }
+.kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); }
+.kpi-value { font-size: 26px; font-weight: 800; line-height: 1.1; margin: 2px 0; }
+.kpi-sub   { font-size: 10px; color: var(--muted); }
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN GRID
+═══════════════════════════════════════════════════════════════ */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px)  { .main-grid { grid-template-columns: 1fr; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM GRID
+═══════════════════════════════════════════════════════════════ */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 900px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   BADGE
+═══════════════════════════════════════════════════════════════ */
+.badge {
+  font-size: 9px; font-weight: 800;
+  padding: 3px 8px; border-radius: 999px;
+  letter-spacing: .6px; text-transform: uppercase;
+}
+
+.badge-cyan   { background: rgba(0,212,255,.1);   color: var(--cyan);   border: 1px solid rgba(0,212,255,.2); }
+.badge-yellow { background: rgba(245,158,11,.1);  color: var(--yellow); border: 1px solid rgba(245,158,11,.2); }
+.badge-purple { background: rgba(139,92,246,.1);  color: var(--purple); border: 1px solid rgba(139,92,246,.2); }
+.badge-green  { background: rgba(16,185,129,.1);  color: var(--green);  border: 1px solid rgba(16,185,129,.2); }
+.badge-red    { background: rgba(239,68,68,.1);   color: var(--red);    border: 1px solid rgba(239,68,68,.2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   TRAFFIC — SECTIONS
+═══════════════════════════════════════════════════════════════ */
+.section-block {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(15,35,64,.9);
+}
+.section-block:last-child { border-bottom: none; }
+
+.section-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 7px;
+}
+
+.section-name { font-weight: 700; font-size: 12px; }
+.section-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+.tl { display: flex; gap: 5px; align-items: center; }
+.tl-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  opacity: .15; transition: opacity .4s, box-shadow .4s;
+}
+.tl-dot.on { opacity: 1; }
+.tl-r { background: var(--red);    } .tl-r.on { box-shadow: 0 0 8px var(--red); }
+.tl-y { background: var(--yellow); } .tl-y.on { box-shadow: 0 0 8px var(--yellow); }
+.tl-g { background: var(--green);  } .tl-g.on { box-shadow: 0 0 8px var(--green); }
+
+.bar-row { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+
+.bar-track {
+  background: rgba(15,35,64,.9);
+  border-radius: 999px; height: 4px; overflow: hidden;
+}
+.bar-fill {
+  height: 100%; border-radius: 999px;
+  transition: width .8s cubic-bezier(.4,0,.2,1), background .4s;
+}
+.bar-g { background: linear-gradient(90deg, var(--green),  #34d399); }
+.bar-y { background: linear-gradient(90deg, var(--yellow), #fbbf24); }
+.bar-r { background: linear-gradient(90deg, var(--red),    #f87171); }
+.bar-c { background: linear-gradient(90deg, var(--cyan),   var(--purple)); }
+
+.ts { font-size: 10px; color: var(--muted); margin-top: 5px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CITY MAP (SVG)
+═══════════════════════════════════════════════════════════════ */
+.map-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 90%;
+}
+
+.map-wrap svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.zone-area {
+  cursor: pointer;
+  transition: opacity .4s;
+}
+.zone-area:hover { opacity: .85; }
+
+.zone-label {
+  font-size: 9px;
+  font-weight: 700;
+  fill: rgba(255,255,255,.8);
+  text-anchor: middle;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.zone-pct {
+  font-size: 13px;
+  font-weight: 800;
+  fill: #fff;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GAUGE
+═══════════════════════════════════════════════════════════════ */
+.gauge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.gauge-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); }
+
+/* ═══════════════════════════════════════════════════════════════
+   WEATHER
+═══════════════════════════════════════════════════════════════ */
+.weather-hero {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.25);
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.weather-emoji { font-size: 52px; line-height: 1; }
+
+.weather-temp {
+  font-size: 40px; font-weight: 800;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1;
+}
+
+.weather-cond { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+
+.wrow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(15,35,64,.9);
+  font-size: 12px;
+}
+.wrow:last-child { border-bottom: none; }
+.wrow-label { color: var(--muted); }
+.wrow-value { font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHTING CONTROL
+═══════════════════════════════════════════════════════════════ */
+.adjust-bar {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+
+.field select,
+.field input {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field select:focus,
+.field input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(0,212,255,.1);
+}
+
+.btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  letter-spacing: .3px;
+  transition: opacity .15s, transform .1s, box-shadow .15s;
+}
+.btn:hover  { opacity: .88; }
+.btn:active { transform: scale(.97); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  color: #fff;
+  box-shadow: 0 0 16px rgba(0,212,255,.25);
+}
+
+.btn-ghost {
+  background: rgba(16,185,129,.1);
+  color: var(--green);
+  border: 1px solid rgba(16,185,129,.3);
+}
+
+/* Zone sliders */
+.zone-sliders { display: flex; flex-direction: column; gap: 10px; }
+
+.zone-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 42px 70px;
+  align-items: center;
+  gap: 10px;
+}
+
+.zone-name { font-size: 11px; font-weight: 700; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border2);
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0,212,255,.6);
+  cursor: pointer;
+  transition: box-shadow .15s;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 14px rgba(0,212,255,.9);
+}
+
+.range-val {
+  font-size: 12px; font-weight: 800;
+  text-align: right; color: var(--cyan);
+  font-family: 'Cascadia Code', monospace;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EVENT TICKER
+═══════════════════════════════════════════════════════════════ */
+.event-feed { overflow: hidden; max-height: 320px; }
+
+.event-list { display: flex; flex-direction: column; gap: 6px; }
+
+.event-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  animation: slideDown .3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ev-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  margin-top: 3px; flex-shrink: 0;
+}
+
+.ev-name {
+  font-size: 11px; font-weight: 700;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  margin-bottom: 2px;
+}
+
+.ev-payload {
+  font-size: 10px; color: var(--muted);
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+.ev-time { font-size: 10px; color: var(--muted); white-space: nowrap; margin-left: auto; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════════ */
+#toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px; font-weight: 600;
+  opacity: 0; transform: translateY(10px);
+  transition: all .25s;
+  z-index: 999;
+  pointer-events: none;
+  max-width: 340px;
+  backdrop-filter: blur(16px);
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════════════════════════
+   DATA FLOW TAB
+═══════════════════════════════════════════════════════════════ */
+.flow-page { display: flex; flex-direction: column; gap: 20px; }
+
+.section-title {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.pattern-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  transition: border-color .2s;
+}
+.pattern-card:hover { border-color: rgba(0,212,255,.25); }
+
+.pattern-icon { font-size: 22px; margin-bottom: 8px; }
+.pattern-name { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+.pattern-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 900px) { .flow-grid { grid-template-columns: 1fr; } }
+
+.flow-col { display: flex; flex-direction: column; gap: 0; }
+
+.flow-box {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px;
+  backdrop-filter: blur(12px);
+}
+
+.flow-box-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); margin-bottom: 6px; }
+.flow-box-sub   { font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+
+.flow-box.hub-box {
+  background: linear-gradient(135deg, rgba(0,212,255,.06), rgba(139,92,246,.06));
+  border-color: rgba(0,212,255,.25);
+  box-shadow: 0 0 24px rgba(0,212,255,.06);
+}
+
+.flow-code {
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 10px;
+  color: #7dd3fc;
+  background: rgba(0,0,0,.4);
+  border-radius: 6px;
+  padding: 8px 10px;
+  line-height: 1.65;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  gap: 3px;
+}
+
+.arrow-track {
+  width: 2px;
+  height: 28px;
+  background: var(--border2);
+  border-radius: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.arrow-track::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, transparent, var(--cyan));
+  animation: arrowFlow 1.2s linear infinite;
+}
+
+@keyframes arrowFlow {
+  from { top: -100%; }
+  to   { top:  200%; }
+}
+
+.arrow-head { color: var(--cyan); font-size: 12px; }
+.arrow-label { font-size: 9px; font-weight: 800; color: var(--muted); letter-spacing: .4px; }
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 700px) { .rules-grid { grid-template-columns: 1fr; } }
+
+.rule-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.rule-icon { font-size: 16px; flex-shrink: 0; }
+.rule-desc { font-size: 11px; color: var(--muted); flex: 1; line-height: 1.4; }
+.rule-result { font-size: 11px; font-weight: 700; color: var(--cyan); white-space: nowrap; }
+
+/* ═══════════════════════════════════════════════════════════════
+   EVENTS TAB
+═══════════════════════════════════════════════════════════════ */
+.events-page { display: flex; flex-direction: column; gap: 14px; }
+
+.events-legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--muted);
+}
+
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+#events-page-list { display: flex; flex-direction: column; gap: 6px; }
+
+.event-page-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 15px;
+  backdrop-filter: blur(12px);
+  animation: slideIn .25s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ep-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 3px; flex-shrink: 0; }
+.ep-name { font-size: 12px; font-weight: 700; font-family: 'Cascadia Code', monospace; margin-bottom: 3px; }
+.ep-payload { font-size: 11px; color: var(--muted); font-family: 'Cascadia Code', monospace; word-break: break-all; line-height: 1.5; }
+.ep-time { font-size: 10px; color: var(--muted); white-space: nowrap; margin-left: auto; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════════════ */
+footer {
+  text-align: center;
+  padding: 12px 28px;
+  color: var(--muted);
+  font-size: 11px;
+  border-top: 1px solid var(--border);
+}
   </style>
 </head>
 <body>
 
-<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<!-- ── HEADER ─────────────────────────────────────────────────────────────── -->
 <header>
-  <div class="logo">
-    <div class="logo-badge">🏙️</div>
-    <div class="logo-text">
-      <h1>Smart City Middleware</h1>
-      <p>Plataforma de Integração Urbana · Interoperabilidade de Sistemas</p>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🏙️</div>
+      <div class="logo-text">
+        <h1>Smart City Middleware</h1>
+        <p>Plataforma de Interoperabilidade Urbana · Integração de Sistemas</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="live-chip"><div class="pulse-dot"></div>AO VIVO</div>
     </div>
   </div>
-  <div class="header-right">
-    <span id="sync-time">–</span>
-    <div class="live-pill"><div class="dot"></div> AO VIVO</div>
-  </div>
+  <!-- Skyline decorativa -->
+  <svg class="skyline" viewBox="0 0 1200 18" preserveAspectRatio="none" fill="rgba(0,212,255,1)">
+    <rect x="0"   y="10" width="18" height="8"/>
+    <rect x="20"  y="5"  width="10" height="13"/>
+    <rect x="32"  y="2"  width="14" height="16"/>
+    <rect x="48"  y="8"  width="10" height="10"/>
+    <rect x="60"  y="4"  width="16" height="14"/>
+    <rect x="78"  y="1"  width="8"  height="17"/>
+    <rect x="88"  y="7"  width="12" height="11"/>
+    <rect x="102" y="3"  width="10" height="15"/>
+    <rect x="114" y="9"  width="14" height="9"/>
+    <rect x="130" y="5"  width="8"  height="13"/>
+    <rect x="140" y="0"  width="12" height="18"/>
+    <rect x="154" y="6"  width="10" height="12"/>
+    <rect x="166" y="3"  width="16" height="15"/>
+    <rect x="184" y="8"  width="8"  height="10"/>
+    <rect x="194" y="4"  width="14" height="14"/>
+    <rect x="210" y="1"  width="10" height="17"/>
+    <rect x="222" y="7"  width="12" height="11"/>
+    <rect x="250" y="2"  width="18" height="16"/>
+    <rect x="270" y="6"  width="10" height="12"/>
+    <rect x="282" y="0"  width="14" height="18"/>
+    <rect x="298" y="4"  width="8"  height="14"/>
+    <rect x="310" y="8"  width="16" height="10"/>
+    <rect x="330" y="2"  width="10" height="16"/>
+    <rect x="360" y="5"  width="20" height="13"/>
+    <rect x="382" y="1"  width="10" height="17"/>
+    <rect x="394" y="7"  width="14" height="11"/>
+    <rect x="420" y="3"  width="12" height="15"/>
+    <rect x="434" y="9"  width="8"  height="9"/>
+    <rect x="444" y="4"  width="16" height="14"/>
+    <rect x="462" y="0"  width="10" height="18"/>
+    <rect x="474" y="6"  width="12" height="12"/>
+    <rect x="500" y="2"  width="18" height="16"/>
+    <rect x="520" y="5"  width="10" height="13"/>
+    <rect x="532" y="1"  width="14" height="17"/>
+    <rect x="560" y="8"  width="8"  height="10"/>
+    <rect x="570" y="3"  width="16" height="15"/>
+    <rect x="590" y="0"  width="12" height="18"/>
+    <rect x="610" y="6"  width="10" height="12"/>
+    <rect x="640" y="2"  width="18" height="16"/>
+    <rect x="660" y="5"  width="10" height="13"/>
+    <rect x="680" y="1"  width="14" height="17"/>
+    <rect x="700" y="8"  width="8"  height="10"/>
+    <rect x="720" y="3"  width="16" height="15"/>
+    <rect x="740" y="0"  width="12" height="18"/>
+    <rect x="760" y="6"  width="10" height="12"/>
+    <rect x="780" y="4"  width="16" height="14"/>
+    <rect x="800" y="2"  width="18" height="16"/>
+    <rect x="820" y="7"  width="12" height="11"/>
+    <rect x="840" y="1"  width="10" height="17"/>
+    <rect x="860" y="5"  width="14" height="13"/>
+    <rect x="880" y="9"  width="8"  height="9"/>
+    <rect x="900" y="3"  width="16" height="15"/>
+    <rect x="920" y="0"  width="12" height="18"/>
+    <rect x="940" y="6"  width="10" height="12"/>
+    <rect x="960" y="2"  width="18" height="16"/>
+    <rect x="980" y="5"  width="10" height="13"/>
+    <rect x="1000" y="1" width="14" height="17"/>
+    <rect x="1020" y="8" width="8"  height="10"/>
+    <rect x="1030" y="3" width="16" height="15"/>
+    <rect x="1050" y="0" width="12" height="18"/>
+    <rect x="1070" y="6" width="10" height="12"/>
+    <rect x="1090" y="4" width="16" height="14"/>
+    <rect x="1110" y="2" width="18" height="16"/>
+    <rect x="1130" y="7" width="12" height="11"/>
+    <rect x="1150" y="1" width="10" height="17"/>
+    <rect x="1170" y="5" width="14" height="13"/>
+    <rect x="1185" y="9" width="15" height="9"/>
+  </svg>
 </header>
 
-<!-- ── Tabs ────────────────────────────────────────────────────────────────── -->
+<!-- ── TABS ───────────────────────────────────────────────────────────────── -->
 <div class="tabs">
   <div class="tab active" data-tab="dashboard">📊 Dashboard</div>
   <div class="tab" data-tab="flow">🔀 Fluxo de Dados</div>
   <div class="tab" data-tab="events">📡 Log de Eventos</div>
 </div>
 
-<!-- ── Main ────────────────────────────────────────────────────────────────── -->
+<!-- ── MAIN ───────────────────────────────────────────────────────────────── -->
 <main>
 
-  <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <!-- ABA 1 — DASHBOARD                                                      -->
-  <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <div id="panel-dashboard" class="tab-panel active">
+<!-- ════════════════════════════════════════════════════════════
+     ABA 1 · DASHBOARD
+════════════════════════════════════════════════════════════ -->
+<div id="panel-dashboard" class="tab-panel active">
 
-    <!-- Ajuste de iluminação -->
-    <div class="adjust-card">
-      <div class="adjust-title">⚙️ Controle de Iluminação</div>
-      <div class="form-row">
-        <div class="field">
-          <label>Zona urbana</label>
-          <select id="zone-select" style="min-width:160px">
-            <option>Aguardando dados…</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Intensidade 0–100 &nbsp;(vazio = automático)</label>
-          <input id="intensity-input" type="number" min="0" max="100"
-                 placeholder="Automático" style="width:180px" />
-        </div>
-        <button class="btn btn-primary" onclick="adjustLighting()">⚡ Aplicar</button>
-        <button class="btn btn-ghost"   onclick="adjustLighting(true)">🤖 Automático</button>
+  <!-- Barra de controle -->
+  <div class="adjust-bar">
+    <div class="field">
+      <label>Zona Urbana</label>
+      <select id="zone-select" style="min-width:150px"><option>Carregando…</option></select>
+    </div>
+    <div class="field">
+      <label>Intensidade 0–100</label>
+      <input id="intensity-input" type="number" min="0" max="100" placeholder="Auto" style="width:120px"/>
+    </div>
+    <button class="btn btn-primary" onclick="adjustLighting()">⚡ Aplicar</button>
+    <button class="btn btn-ghost"   onclick="adjustLighting(true)">🤖 Automático</button>
+    <span id="sync-tag" style="font-size:10px;color:var(--muted);margin-left:auto">–</span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-glow" style="background:var(--cyan)"></div>
+      <div class="kpi-icon-wrap" style="background:rgba(0,212,255,.12)">🚗</div>
+      <div class="kpi-info">
+        <div class="kpi-label">Fluxo Total</div>
+        <div class="kpi-value" id="kpi-flow" style="color:var(--cyan)">–</div>
+        <div class="kpi-sub">veículos / min</div>
       </div>
     </div>
-
-    <!-- Cards -->
-    <div class="grid-3">
-
-      <!-- Tráfego -->
-      <div class="card">
-        <div class="card-stripe"></div>
-        <div class="card-body">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-icon icon-traffic">🚦</div>
-              Sistema de Tráfego
-            </div>
-            <span class="badge badge-cyan">JSON</span>
-          </div>
-          <div id="traffic-list" class="loading">Carregando…</div>
-        </div>
+    <div class="kpi-card">
+      <div class="kpi-glow" style="background:var(--yellow)"></div>
+      <div class="kpi-icon-wrap" style="background:rgba(245,158,11,.12)">📊</div>
+      <div class="kpi-info">
+        <div class="kpi-label">Congestionamento Médio</div>
+        <div class="kpi-value" id="kpi-cong" style="color:var(--yellow)">–</div>
+        <div class="kpi-sub">% de ocupação</div>
       </div>
-
-      <!-- Iluminação -->
-      <div class="card">
-        <div class="card-stripe yellow"></div>
-        <div class="card-body">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-icon icon-light">💡</div>
-              Iluminação Pública
-            </div>
-            <span class="badge badge-yellow">CSV</span>
-          </div>
-          <div id="lighting-list" class="loading">Carregando…</div>
-        </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-glow" style="background:var(--green)"></div>
+      <div class="kpi-icon-wrap" style="background:rgba(16,185,129,.12)">💡</div>
+      <div class="kpi-info">
+        <div class="kpi-label">Luminárias Ativas</div>
+        <div class="kpi-value" id="kpi-lamps" style="color:var(--green)">–</div>
+        <div class="kpi-sub">total na rede</div>
       </div>
-
-      <!-- Clima -->
-      <div class="card">
-        <div class="card-stripe purple"></div>
-        <div class="card-body">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-icon icon-weather">🌤️</div>
-              Meteorologia
-            </div>
-            <span class="badge badge-purple">XML</span>
-          </div>
-          <div id="weather-content" class="loading">Carregando…</div>
-        </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-glow" style="background:var(--purple)"></div>
+      <div class="kpi-icon-wrap" style="background:rgba(139,92,246,.12)">🌡️</div>
+      <div class="kpi-info">
+        <div class="kpi-label">Temperatura</div>
+        <div class="kpi-value" id="kpi-temp" style="color:var(--purple)">–</div>
+        <div class="kpi-sub" id="kpi-cond">–</div>
       </div>
-
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <!-- ABA 2 — FLUXO DE DADOS                                                 -->
-  <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <div id="panel-flow" class="tab-panel flow-page">
+  <!-- Main grid: Chart | Map | Weather -->
+  <div class="main-grid">
 
-    <!-- Padrões utilizados -->
-    <div>
-      <div class="flow-section-title">Padrões de projeto aplicados</div>
-      <div class="pattern-grid">
-        <div class="pattern-card">
-          <div class="pattern-icon">🔌</div>
-          <div class="pattern-name">Adapter</div>
-          <div class="pattern-desc">
-            Cada subsistema tem um adaptador que converte o formato proprietário
-            (JSON, CSV, XML) para o schema canônico sem alterar o sistema original.
-          </div>
+    <!-- Traffic chart -->
+    <div class="card">
+      <div class="stripe stripe-cyan"></div>
+      <div class="card-body">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(0,212,255,.1)">📈</div>
+          Histórico de Congestionamento (%)
+          <span style="margin-left:auto" class="badge badge-cyan">Tempo Real</span>
         </div>
-        <div class="pattern-card">
-          <div class="pattern-icon">🔄</div>
-          <div class="pattern-name">Observer / Event Bus</div>
-          <div class="pattern-desc">
-            Mudanças em um subsistema disparam eventos no EventBus.
-            Os demais reagem automaticamente — sem acoplamento direto.
-          </div>
+        <canvas id="traffic-chart" height="170"></canvas>
+      </div>
+    </div>
+
+    <!-- City Map -->
+    <div class="card">
+      <div class="stripe stripe-yellow"></div>
+      <div class="card-body">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(245,158,11,.1)">🗺️</div>
+          Mapa de Zonas — Intensidade Luminosa
         </div>
-        <div class="pattern-card">
-          <div class="pattern-icon">🎯</div>
-          <div class="pattern-name">Strategy</div>
-          <div class="pattern-desc">
-            Os adaptadores são intercambiáveis. Trocar o fornecedor de tráfego,
-            por exemplo, não exige alteração no CityHub.
-          </div>
+        <div class="map-wrap">
+          <svg id="city-map" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Background -->
+            <rect width="200" height="200" fill="#060f1e" rx="8"/>
+
+            <!-- Road grid -->
+            <rect x="93" y="0"   width="14" height="200" fill="#0a1a2e"/>
+            <rect x="0"  y="93"  width="200" height="14" fill="#0a1a2e"/>
+
+            <!-- ZONA-NORTE (top-left) -->
+            <rect id="zone-ZONA-NORTE"  x="4"   y="4"   width="85" height="85" rx="6" fill="#10b981" opacity=".25" class="zone-area" filter="url(#glow)"/>
+            <!-- buildings -->
+            <rect x="12" y="18" width="14" height="30" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="30" y="24" width="10" height="24" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="44" y="14" width="18" height="34" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="66" y="20" width="12" height="28" fill="rgba(255,255,255,.06)" rx="2"/>
+            <text x="46" y="74" class="zone-label">Norte</text>
+            <text id="pct-ZONA-NORTE" x="46" y="60" class="zone-pct">–</text>
+
+            <!-- ZONA-LESTE (top-right) -->
+            <rect id="zone-ZONA-LESTE"  x="111" y="4"   width="85" height="85" rx="6" fill="#f59e0b" opacity=".25" class="zone-area" filter="url(#glow)"/>
+            <rect x="118" y="18" width="12" height="26" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="134" y="22" width="16" height="22" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="154" y="12" width="10" height="36" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="168" y="18" width="14" height="30" fill="rgba(255,255,255,.06)" rx="2"/>
+            <text x="153" y="74" class="zone-label">Leste</text>
+            <text id="pct-ZONA-LESTE" x="153" y="60" class="zone-pct">–</text>
+
+            <!-- ZONA-CENTRO (bottom-left) -->
+            <rect id="zone-ZONA-CENTRO" x="4"   y="111" width="85" height="85" rx="6" fill="#8b5cf6" opacity=".25" class="zone-area" filter="url(#glow)"/>
+            <rect x="12" y="120" width="18" height="28" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="34" y="116" width="12" height="32" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="50" y="122" width="16" height="26" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="70" y="118" width="10" height="30" fill="rgba(255,255,255,.06)" rx="2"/>
+            <text x="46" y="178" class="zone-label">Centro</text>
+            <text id="pct-ZONA-CENTRO" x="46" y="164" class="zone-pct">–</text>
+
+            <!-- ZONA-SUL (bottom-right) -->
+            <rect id="zone-ZONA-SUL"    x="111" y="111" width="85" height="85" rx="6" fill="#ef4444" opacity=".25" class="zone-area" filter="url(#glow)"/>
+            <rect x="120" y="122" width="14" height="24" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="138" y="116" width="10" height="30" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="152" y="120" width="18" height="26" fill="rgba(255,255,255,.06)" rx="2"/>
+            <rect x="174" y="124" width="12" height="22" fill="rgba(255,255,255,.06)" rx="2"/>
+            <text x="153" y="178" class="zone-label">Sul</text>
+            <text id="pct-ZONA-SUL" x="153" y="164" class="zone-pct">–</text>
+
+            <!-- Road labels -->
+            <text x="100" y="89" class="zone-label" style="fill:rgba(0,212,255,.5);font-size:7px">AV. CENTRAL</text>
+          </svg>
         </div>
-        <div class="pattern-card">
-          <div class="pattern-icon">💉</div>
-          <div class="pattern-name">Dependency Injection</div>
-          <div class="pattern-desc">
-            O CityHub recebe os adaptadores via construtor, facilitando
-            testes unitários com mocks isolados.
+      </div>
+    </div>
+
+    <!-- Weather -->
+    <div class="card">
+      <div class="stripe stripe-purple"></div>
+      <div class="card-body">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(139,92,246,.1)">🌤️</div>
+          Condições Meteorológicas
+          <span style="margin-left:auto" class="badge badge-purple">XML</span>
+        </div>
+        <div id="weather-content">
+          <div style="color:var(--muted);padding:20px 0;text-align:center">Carregando…</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom: Traffic sections + Event feed -->
+  <div class="bottom-grid">
+
+    <!-- Traffic sections -->
+    <div class="card">
+      <div class="stripe stripe-cyan"></div>
+      <div class="card-body">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(0,212,255,.1)">🚦</div>
+          Monitoramento de Vias
+          <span style="margin-left:auto" class="badge badge-cyan">JSON</span>
+        </div>
+        <div id="traffic-sections">
+          <div style="color:var(--muted);text-align:center;padding:20px 0">Carregando…</div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="section-title" style="margin-bottom:8px">Iluminação por Zona</div>
+          <div id="zone-sliders" class="zone-sliders"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event feed -->
+    <div class="card">
+      <div class="stripe stripe-green"></div>
+      <div class="card-body">
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(16,185,129,.1)">📡</div>
+          EventBus — Mensagens em Tempo Real
+        </div>
+        <div id="event-feed" class="event-feed">
+          <div class="event-list" id="event-list">
+            <div style="color:var(--muted);text-align:center;padding:20px 0;font-size:12px">Aguardando eventos…</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="separator"></div>
+  </div>
 
-    <!-- Pipelines de transformação -->
-    <div>
-      <div class="flow-section-title">Pipeline de transformação — dados brutos → schema canônico</div>
-      <div class="flow-grid">
+</div><!-- /panel-dashboard -->
 
-        <!-- Tráfego -->
-        <div class="flow-subsystem">
-          <div class="flow-label-row">
-            <span class="badge badge-cyan">🚦 Tráfego</span>
-          </div>
-          <div class="flow-box">
-            <div class="flow-box-title">Formato bruto (JSON)</div>
-            <div class="flow-box-sub">Sistema externo envia:</div>
-            <div class="flow-code">{
+
+<!-- ════════════════════════════════════════════════════════════
+     ABA 2 · FLUXO DE DADOS
+════════════════════════════════════════════════════════════ -->
+<div id="panel-flow" class="tab-panel flow-page">
+
+  <div>
+    <div class="section-title">Padrões de Projeto Aplicados</div>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-icon">🔌</div>
+        <div class="pattern-name">Adapter</div>
+        <div class="pattern-desc">Converte formatos proprietários (JSON, CSV, XML) para o schema canônico sem alterar os sistemas originais.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-icon">📡</div>
+        <div class="pattern-name">Observer / Event Bus</div>
+        <div class="pattern-desc">Mudanças em um subsistema disparam eventos. Os demais reagem automaticamente — sem acoplamento direto.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-icon">🎯</div>
+        <div class="pattern-name">Strategy</div>
+        <div class="pattern-desc">Adaptadores são intercambiáveis. Trocar o fornecedor não exige modificação no CityHub.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-icon">💉</div>
+        <div class="pattern-name">Dependency Injection</div>
+        <div class="pattern-desc">CityHub recebe adaptadores via construtor, permitindo testes unitários com mocks isolados.</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Pipeline de Transformação — Dados Brutos → Schema Canônico</div>
+    <div class="flow-grid">
+
+      <!-- Tráfego -->
+      <div class="flow-col">
+        <div style="margin-bottom:8px"><span class="badge badge-cyan">🚦 Sistema de Tráfego</span></div>
+        <div class="flow-box">
+          <div class="flow-box-title">Formato do Fornecedor (JSON)</div>
+          <div class="flow-code">{
   "section_id": "AV-BRASIL-01",
   "vehicles_per_min": 42,
   "occupancy_pct": 68,
   "signal_color": "Y",
   "read_time": 1716389200000
 }</div>
-          </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-anim"></div>
-            <div class="flow-arrow-label">TrafficAdapter</div>
-          </div>
-          <div class="flow-box flow-hub">
-            <div class="flow-box-title">Schema Canônico (TrafficData)</div>
-            <div class="flow-code">{
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-track"></div>
+          <div class="arrow-head">▼</div>
+          <div class="arrow-label">TrafficAdapter</div>
+        </div>
+        <div class="flow-box hub-box">
+          <div class="flow-box-title">Schema Canônico (TrafficData)</div>
+          <div class="flow-code">{
   "sectionId": "AV-BRASIL-01",
   "flowRate": 42,
   "congestionLevel": 68,
   "trafficLightStatus": "yellow",
   "timestamp": "2024-05-22T..."
 }</div>
-          </div>
         </div>
+      </div>
 
-        <!-- Iluminação -->
-        <div class="flow-subsystem">
-          <div class="flow-label-row">
-            <span class="badge badge-yellow">💡 Iluminação</span>
-          </div>
-          <div class="flow-box">
-            <div class="flow-box-title">Formato bruto (CSV)</div>
-            <div class="flow-box-sub">Sistema legado envia:</div>
-            <div class="flow-code">ZONA-NORTE,75,1,120,1716389200000
-ZONA-SUL,50,0,98,1716389198000
-ZONA-CENTRO,90,1,210,1716389196000
-ZONA-LESTE,30,1,85,1716389194000</div>
-          </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-anim"></div>
-            <div class="flow-arrow-label">LightingAdapter</div>
-          </div>
-          <div class="flow-box flow-hub">
-            <div class="flow-box-title">Schema Canônico (LightingData)</div>
-            <div class="flow-code">{
+      <!-- Iluminação -->
+      <div class="flow-col">
+        <div style="margin-bottom:8px"><span class="badge badge-yellow">💡 Sistema de Iluminação</span></div>
+        <div class="flow-box">
+          <div class="flow-box-title">Formato do Fornecedor (CSV)</div>
+          <div class="flow-code">ZONA-NORTE,75,1,120,1716...
+ZONA-SUL,50,0,98,17163...
+ZONA-CENTRO,90,1,210,17...
+ZONA-LESTE,30,1,85,1716...</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-track"></div>
+          <div class="arrow-head">▼</div>
+          <div class="arrow-label">LightingAdapter</div>
+        </div>
+        <div class="flow-box hub-box">
+          <div class="flow-box-title">Schema Canônico (LightingData)</div>
+          <div class="flow-code">{
   "zoneId": "ZONA-NORTE",
   "intensityPercent": 75,
   "autoMode": true,
   "activeLamps": 120,
   "timestamp": "2024-05-22T..."
 }</div>
-          </div>
         </div>
+      </div>
 
-        <!-- Clima -->
-        <div class="flow-subsystem">
-          <div class="flow-label-row">
-            <span class="badge badge-purple">🌤️ Meteorologia</span>
-          </div>
-          <div class="flow-box">
-            <div class="flow-box-title">Formato bruto (XML)</div>
-            <div class="flow-box-sub">Estação meteorológica envia:</div>
-            <div class="flow-code">&lt;weather_report&gt;
-  &lt;temp_celsius&gt;27.4&lt;/temp_celsius&gt;
-  &lt;rain_mm_h&gt;0.0&lt;/rain_mm_h&gt;
-  &lt;solar_lux&gt;65000&lt;/solar_lux&gt;
-  &lt;sky_condition&gt;CLEAR&lt;/sky_condition&gt;
+      <!-- Clima -->
+      <div class="flow-col">
+        <div style="margin-bottom:8px"><span class="badge badge-purple">🌤️ Sistema Meteorológico</span></div>
+        <div class="flow-box">
+          <div class="flow-box-title">Formato do Fornecedor (XML)</div>
+          <div class="flow-code">&lt;weather_report&gt;
+  &lt;temp_celsius&gt;27.4&lt;/temp&gt;
+  &lt;rain_mm_h&gt;0.0&lt;/rain&gt;
+  &lt;solar_lux&gt;65000&lt;/solar&gt;
+  &lt;sky_condition&gt;CLEAR&lt;/sky&gt;
 &lt;/weather_report&gt;</div>
-          </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-anim"></div>
-            <div class="flow-arrow-label">WeatherAdapter</div>
-          </div>
-          <div class="flow-box flow-hub">
-            <div class="flow-box-title">Schema Canônico (WeatherData)</div>
-            <div class="flow-code">{
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-track"></div>
+          <div class="arrow-head">▼</div>
+          <div class="arrow-label">WeatherAdapter</div>
+        </div>
+        <div class="flow-box hub-box">
+          <div class="flow-box-title">Schema Canônico (WeatherData)</div>
+          <div class="flow-code">{
   "temperatureCelsius": 27.4,
   "rainfallMmPerHour": 0.0,
   "luminosityLevel": 65,
   "condition": "clear",
   "timestamp": "2024-05-22T..."
 }</div>
-          </div>
         </div>
-
       </div>
     </div>
+  </div>
 
-    <div class="separator"></div>
+  <div>
+    <div class="section-title">Regras de Automação do CityHub</div>
+    <div class="rules-grid">
+      <div class="rule-row">
+        <div class="rule-icon">🌧️</div>
+        <div class="rule-desc">Chuva ou tempestade detectada pelo sistema meteorológico</div>
+        <div class="rule-result">Iluminação → mín. 80%</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon">🚗</div>
+        <div class="rule-desc">Congestionamento acima de 80% em alguma via monitorada</div>
+        <div class="rule-result">Iluminação → 100%</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon">🚦</div>
+        <div class="rule-desc">Congestionamento acima de 70% na via (ajuste automático)</div>
+        <div class="rule-result">Base + 30%</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon">☀️</div>
+        <div class="rule-desc">Luminosidade natural acima de 70% (pleno dia)</div>
+        <div class="rule-result">Base − 20%</div>
+      </div>
+    </div>
+  </div>
 
-    <!-- CityHub orquestrador -->
+</div><!-- /panel-flow -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ABA 3 · LOG DE EVENTOS
+════════════════════════════════════════════════════════════ -->
+<div id="panel-events" class="tab-panel events-page">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
     <div>
-      <div class="flow-section-title">CityHub — orquestrador central</div>
-      <div class="card">
-        <div class="card-stripe"></div>
-        <div class="card-body">
-          <div style="display:flex;gap:32px;flex-wrap:wrap">
-
-            <div style="flex:1;min-width:240px">
-              <div class="section-label">Responsabilidades</div>
-              <div class="row"><span class="row-label">Normalização</span><span class="row-value">Converte todos os formatos para schema único</span></div>
-              <div class="row"><span class="row-label">Orquestração</span><span class="row-value">Chama adaptadores e agrega os dados</span></div>
-              <div class="row"><span class="row-label">Automação</span><span class="row-value">Ajusta iluminação via tráfego + clima</span></div>
-              <div class="row"><span class="row-label">Eventos</span><span class="row-value">Publica no EventBus a cada leitura</span></div>
-            </div>
-
-            <div style="flex:1;min-width:240px">
-              <div class="section-label">Regras de automação</div>
-              <div class="row"><span class="row-label">🌧️ Chuva / Tempestade</span><span class="row-value" style="color:var(--accent)">Iluminação → mín. 80%</span></div>
-              <div class="row"><span class="row-label">🚗 Congestionamento &gt;80%</span><span class="row-value" style="color:var(--accent)">Iluminação → 100%</span></div>
-              <div class="row"><span class="row-label">☀️ Luminosidade natural &gt;70</span><span class="row-value" style="color:var(--accent)">Reduz 20% da base</span></div>
-              <div class="row"><span class="row-label">🚦 Congestionamento &gt;70%</span><span class="row-value" style="color:var(--accent)">Adiciona +30% à base</span></div>
-            </div>
-
-          </div>
-        </div>
+      <div class="section-title">EventBus · Histórico de Mensagens</div>
+      <div class="events-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>traffic:*</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>lighting:*</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>weather:*</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>auto-adjusted</div>
       </div>
     </div>
-
+    <button class="btn btn-ghost" style="font-size:11px;padding:6px 14px" onclick="clearEventsPage()">Limpar</button>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <!-- ABA 3 — LOG DE EVENTOS                                                 -->
-  <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <div id="panel-events" class="tab-panel">
-
-    <div class="event-log-header">
-      <div class="event-log-title">
-        <div class="card-icon icon-events" style="width:28px;height:28px;font-size:14px">📡</div>
-        EventBus — Fluxo de Mensagens em Tempo Real
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:11px;color:var(--muted)">Atualiza a cada 3s</span>
-        <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px" onclick="clearEvents()">Limpar tela</button>
-      </div>
-    </div>
-
-    <!-- Legenda -->
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px">
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></div> traffic:*
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--yellow)"></div> lighting:*
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--purple)"></div> weather:*
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div> auto-adjusted
-      </div>
-    </div>
-
-    <div id="events-container">
-      <div class="empty-state">Aguardando eventos do EventBus…</div>
-    </div>
-
+  <div id="events-page-list">
+    <div style="color:var(--muted);text-align:center;padding:40px 0;font-size:13px">Aguardando eventos…</div>
   </div>
+
+</div><!-- /panel-events -->
 
 </main>
 
@@ -916,255 +1294,412 @@ ZONA-LESTE,30,1,85,1716389194000</div>
 
 <div id="toast"></div>
 
-<!-- ── Scripts ───────────────────────────────────────────────────────────── -->
+<!-- ═══════════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════════ -->
 <script>
-  // ── Tab navigation ─────────────────────────────────────────────────────────
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
-    });
+/* ── Clock ─────────────────────────────────────────────────────────────────── */
+function updateClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ── Tabs ───────────────────────────────────────────────────────────────────── */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── Chart.js setup ─────────────────────────────────────────────────────────── */
+const MAX_POINTS = 20;
+
+const chartData = {
+  labels:   [],
+  datasets: [],
+};
+
+const SECTION_COLORS = ['#00d4ff', '#f59e0b', '#ef4444'];
+const SECTION_NAMES  = [];
+
+const trafficChart = new Chart(
+  document.getElementById('traffic-chart').getContext('2d'),
+  {
+    type: 'line',
+    data: chartData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 400 },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#4a6580',
+            font: { size: 10, weight: '600' },
+            boxWidth: 10,
+            padding: 12,
+          },
+        },
+        tooltip: {
+          backgroundColor: 'rgba(6,15,30,.95)',
+          borderColor: '#0f2340',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor:  '#4a6580',
+          padding: 10,
+        },
+      },
+      scales: {
+        x: {
+          ticks: { color: '#4a6580', font: { size: 10 }, maxTicksLimit: 6 },
+          grid:  { color: 'rgba(15,35,64,.8)' },
+          border:{ color: '#0f2340' },
+        },
+        y: {
+          min: 0, max: 100,
+          ticks: {
+            color: '#4a6580', font: { size: 10 },
+            callback: v => v + '%',
+          },
+          grid:  { color: 'rgba(15,35,64,.8)' },
+          border:{ color: '#0f2340' },
+        },
+      },
+    },
+  }
+);
+
+/* ── Helpers ─────────────────────────────────────────────────────────────────── */
+function congColor(pct) {
+  if (pct >= 75) return 'var(--red)';
+  if (pct >= 45) return 'var(--yellow)';
+  return 'var(--green)';
+}
+
+function barClass(pct) {
+  if (pct >= 75) return 'bar-r';
+  if (pct >= 45) return 'bar-y';
+  return 'bar-g';
+}
+
+function intClass(pct) {
+  if (pct >= 65) return 'bar-g';
+  if (pct >= 35) return 'bar-y';
+  return 'bar-r';
+}
+
+const condEmoji  = { clear:'☀️', cloudy:'⛅', rainy:'🌧️', stormy:'⛈️' };
+const condLabel  = { clear:'Céu Limpo', cloudy:'Nublado', rainy:'Chuva', stormy:'Tempestade' };
+
+function fmtTime(iso) {
+  return new Date(iso).toLocaleTimeString('pt-BR',
+    { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+
+function animateCounter(el, newVal, suffix = '') {
+  const current = parseFloat(el.dataset.val ?? 0);
+  const diff    = newVal - current;
+  const steps   = 20;
+  let   step    = 0;
+
+  const interval = setInterval(() => {
+    step++;
+    const v = current + diff * (step / steps);
+    el.textContent = (Number.isInteger(newVal) ? Math.round(v) : v.toFixed(1)) + suffix;
+    if (step >= steps) {
+      el.textContent = newVal + suffix;
+      el.dataset.val = newVal;
+      clearInterval(interval);
+    }
+  }, 20);
+}
+
+/* ── Zone map colors ────────────────────────────────────────────────────────── */
+const ZONE_BASE_COLORS = {
+  'ZONA-NORTE':  '#10b981',
+  'ZONA-LESTE':  '#f59e0b',
+  'ZONA-CENTRO': '#8b5cf6',
+  'ZONA-SUL':    '#ef4444',
+};
+
+function intensityToOpacity(pct) {
+  return 0.08 + (pct / 100) * 0.55;
+}
+
+function updateZoneMap(lighting) {
+  lighting.forEach(z => {
+    const rect = document.getElementById('zone-' + z.zoneId);
+    const pctEl = document.getElementById('pct-' + z.zoneId);
+    if (rect) {
+      rect.setAttribute('opacity', intensityToOpacity(z.intensityPercent));
+    }
+    if (pctEl) {
+      pctEl.textContent = z.intensityPercent + '%';
+    }
+  });
+}
+
+/* ── Render traffic ────────────────────────────────────────────────────────── */
+function renderTraffic(list) {
+  const el = document.getElementById('traffic-sections');
+
+  // Update chart
+  const label = fmtTime(list[0]?.timestamp ?? new Date().toISOString());
+  chartData.labels.push(label);
+  if (chartData.labels.length > MAX_POINTS) chartData.labels.shift();
+
+  list.forEach((s, i) => {
+    if (!SECTION_NAMES.includes(s.sectionId)) {
+      SECTION_NAMES.push(s.sectionId);
+      chartData.datasets.push({
+        label:            s.sectionId,
+        data:             [],
+        borderColor:      SECTION_COLORS[i % SECTION_COLORS.length],
+        backgroundColor:  SECTION_COLORS[i % SECTION_COLORS.length] + '18',
+        borderWidth:      2,
+        pointRadius:      2,
+        pointHoverRadius: 5,
+        tension:          .4,
+        fill:             false,
+      });
+    }
+    const ds = chartData.datasets.find(d => d.label === s.sectionId);
+    if (ds) {
+      ds.data.push(s.congestionLevel);
+      if (ds.data.length > MAX_POINTS) ds.data.shift();
+    }
   });
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
-  function pct2color(pct) {
-    if (pct >= 75) return 'red';
-    if (pct >= 45) return 'yellow';
-    return 'green';
-  }
+  trafficChart.update();
 
-  function int2color(pct) {
-    if (pct >= 65) return 'green';
-    if (pct >= 35) return 'yellow';
-    return 'red';
-  }
-
-  const condEmoji  = { clear:'☀️', cloudy:'⛅', rainy:'🌧️', stormy:'⛈️' };
-  const condLabel  = { clear:'Céu Limpo', cloudy:'Nublado', rainy:'Chuva', stormy:'Tempestade' };
-
-  function fmtTime(iso) {
-    return new Date(iso).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-  }
-
-  function toast(msg, ok = true) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.style.borderColor = ok ? 'var(--green)' : 'var(--red)';
-    el.style.color       = ok ? 'var(--green)' : 'var(--red)';
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 3500);
-  }
-
-  // ── Render traffic ──────────────────────────────────────────────────────────
-  function renderTraffic(list) {
-    const el = document.getElementById('traffic-list');
-    if (!list.length) { el.innerHTML = '<p class="loading">Sem dados</p>'; return; }
-
-    el.innerHTML = list.map(s => {
-      const color = pct2color(s.congestionLevel);
-      const tls   = s.trafficLightStatus;
-
-      return `
-        <div class="section">
-          <div class="section-header">
-            <div>
-              <div class="section-name">${s.sectionId}</div>
-              <div class="section-meta">${s.flowRate} veíc/min</div>
-            </div>
-            <div class="tl">
-              <div class="tl-dot tl-r ${tls==='red'?'on':''}"></div>
-              <div class="tl-dot tl-y ${tls==='yellow'?'on':''}"></div>
-              <div class="tl-dot tl-g ${tls==='green'?'on':''}"></div>
-            </div>
+  // Render section list
+  el.innerHTML = list.map(s => {
+    const tls = s.trafficLightStatus;
+    return `
+      <div class="section-block">
+        <div class="section-top">
+          <div>
+            <div class="section-name">${s.sectionId}</div>
+            <div class="section-meta">${s.flowRate} veíc/min</div>
           </div>
-          <div class="bar-label">
-            <span>Congestionamento</span><span>${s.congestionLevel}%</span>
+          <div class="tl">
+            <div class="tl-dot tl-r ${tls==='red'?'on':''}"></div>
+            <div class="tl-dot tl-y ${tls==='yellow'?'on':''}"></div>
+            <div class="tl-dot tl-g ${tls==='green'?'on':''}"></div>
           </div>
-          <div class="bar-track">
-            <div class="bar-fill bar-${color}" style="width:${s.congestionLevel}%"></div>
-          </div>
-          <p class="ts">${fmtTime(s.timestamp)}</p>
-        </div>`;
-    }).join('');
-  }
-
-  // ── Render lighting ─────────────────────────────────────────────────────────
-  function renderLighting(list) {
-    const el  = document.getElementById('lighting-list');
-    const sel = document.getElementById('zone-select');
-
-    if (!list.length) { el.innerHTML = '<p class="loading">Sem dados</p>'; return; }
-
-    const prev = sel.value;
-    sel.innerHTML = list.map(z =>
-      `<option value="${z.zoneId}" ${z.zoneId===prev?'selected':''}>${z.zoneId}</option>`
-    ).join('');
-
-    el.innerHTML = list.map(z => {
-      const color = int2color(z.intensityPercent);
-      return `
-        <div class="section">
-          <div class="section-header">
-            <div>
-              <div class="section-name">${z.zoneId}</div>
-              <div class="section-meta">${z.activeLamps} luminárias ativas</div>
-            </div>
-            <span class="badge ${z.autoMode?'badge-green':'badge-yellow'}">
-              ${z.autoMode?'🤖 Auto':'✋ Manual'}
-            </span>
-          </div>
-          <div class="bar-label">
-            <span>Intensidade</span><span>${z.intensityPercent}%</span>
-          </div>
-          <div class="bar-track">
-            <div class="bar-fill bar-${color}" style="width:${z.intensityPercent}%"></div>
-          </div>
-          <p class="ts">${fmtTime(z.timestamp)}</p>
-        </div>`;
-    }).join('');
-  }
-
-  // ── Render weather ──────────────────────────────────────────────────────────
-  function renderWeather(w) {
-    const el       = document.getElementById('weather-content');
-    const rainCol  = w.rainfallMmPerHour > 5 ? 'var(--red)' : w.rainfallMmPerHour > 0 ? 'var(--yellow)' : 'var(--green)';
-
-    el.innerHTML = `
-      <div class="weather-hero">
-        <div class="weather-emoji">${condEmoji[w.condition] ?? '🌡️'}</div>
-        <div>
-          <div class="weather-temp">${w.temperatureCelsius}°C</div>
-          <div class="weather-cond">${condLabel[w.condition] ?? w.condition}</div>
         </div>
+        <div class="bar-row"><span>Congestionamento</span><span style="color:${congColor(s.congestionLevel)}">${s.congestionLevel}%</span></div>
+        <div class="bar-track"><div class="bar-fill ${barClass(s.congestionLevel)}" style="width:${s.congestionLevel}%"></div></div>
+        <p class="ts">${fmtTime(s.timestamp)}</p>
+      </div>`;
+  }).join('');
+
+  // KPI
+  const totalFlow = list.reduce((a, s) => a + s.flowRate, 0);
+  const avgCong   = Math.round(list.reduce((a, s) => a + s.congestionLevel, 0) / list.length);
+  animateCounter(document.getElementById('kpi-flow'), totalFlow);
+  animateCounter(document.getElementById('kpi-cong'), avgCong, '%');
+}
+
+/* ── Render lighting ────────────────────────────────────────────────────────── */
+function renderLighting(list) {
+  // Zone select
+  const sel  = document.getElementById('zone-select');
+  const prev = sel.value;
+  sel.innerHTML = list.map(z =>
+    `<option value="${z.zoneId}" ${z.zoneId===prev?'selected':''}>${z.zoneId}</option>`
+  ).join('');
+
+  // Zone sliders
+  const slidersEl = document.getElementById('zone-sliders');
+  slidersEl.innerHTML = list.map(z => {
+    const cls = intClass(z.intensityPercent);
+    const col = cls==='bar-g'?'var(--green)':cls==='bar-y'?'var(--yellow)':'var(--red)';
+    return `
+      <div class="zone-row">
+        <div class="zone-name">${z.zoneId.replace('ZONA-','')}</div>
+        <input type="range" min="0" max="100" value="${z.intensityPercent}"
+          oninput="this.nextElementSibling.textContent=this.value+'%'"
+          onchange="applySlider('${z.zoneId}',this.value)"
+          style="--thumb-color:${col}"/>
+        <div class="range-val">${z.intensityPercent}%</div>
+        <span class="badge ${z.autoMode?'badge-green':'badge-yellow'}">${z.autoMode?'Auto':'Manual'}</span>
+      </div>`;
+  }).join('');
+
+  // Map
+  updateZoneMap(list);
+
+  // KPI
+  const totalLamps = list.reduce((a, z) => a + z.activeLamps, 0);
+  animateCounter(document.getElementById('kpi-lamps'), totalLamps);
+}
+
+/* ── Render weather ─────────────────────────────────────────────────────────── */
+function renderWeather(w) {
+  const el      = document.getElementById('weather-content');
+  const rainCol = w.rainfallMmPerHour > 5 ? 'var(--red)' : w.rainfallMmPerHour > 0 ? 'var(--yellow)' : 'var(--green)';
+
+  el.innerHTML = `
+    <div class="weather-hero">
+      <div class="weather-emoji">${condEmoji[w.condition]??'🌡️'}</div>
+      <div>
+        <div class="weather-temp" id="weather-temp-el">${w.temperatureCelsius}°C</div>
+        <div class="weather-cond">${condLabel[w.condition]??w.condition}</div>
       </div>
-      <div class="row">
-        <span class="row-label">Precipitação</span>
-        <span class="row-value" style="color:${rainCol}">${w.rainfallMmPerHour} mm/h</span>
-      </div>
-      <div style="margin:8px 0">
-        <div class="bar-label">
-          <span>Luminosidade natural</span><span>${w.luminosityLevel}%</span>
+    </div>
+    <div class="wrow">
+      <span class="wrow-label">Precipitação</span>
+      <span class="wrow-value" style="color:${rainCol}">${w.rainfallMmPerHour} mm/h</span>
+    </div>
+    <div style="padding:7px 0">
+      <div class="bar-row"><span>Luminosidade Natural</span><span>${w.luminosityLevel}%</span></div>
+      <div class="bar-track"><div class="bar-fill bar-c" style="width:${w.luminosityLevel}%"></div></div>
+    </div>
+    <p class="ts">${fmtTime(w.timestamp)}</p>`;
+
+  animateCounter(document.getElementById('kpi-temp'), w.temperatureCelsius, '°C');
+  document.getElementById('kpi-cond').textContent = condLabel[w.condition] ?? w.condition;
+}
+
+/* ── Render event feed ──────────────────────────────────────────────────────── */
+function evColor(name) {
+  if (name.startsWith('traffic'))  return 'var(--cyan)';
+  if (name.includes('auto'))       return 'var(--green)';
+  if (name.startsWith('lighting')) return 'var(--yellow)';
+  if (name.startsWith('weather'))  return 'var(--purple)';
+  return 'var(--muted)';
+}
+
+let lastEventTs = null;
+
+function renderEvents(events) {
+  if (!events.length) return;
+
+  // Dashboard mini-feed (last 6)
+  const feedEl = document.getElementById('event-list');
+  feedEl.innerHTML = events.slice(0, 6).map(ev => {
+    const col     = evColor(ev.event);
+    const payload = JSON.stringify(ev.payload);
+    const preview = payload.length > 60 ? payload.slice(0, 57) + '…' : payload;
+    return `
+      <div class="event-item">
+        <div class="ev-dot" style="background:${col};box-shadow:0 0 6px ${col}"></div>
+        <div style="flex:1;min-width:0">
+          <div class="ev-name" style="color:${col}">${ev.event}</div>
+          <div class="ev-payload">${preview}</div>
         </div>
-        <div class="bar-track">
-          <div class="bar-fill bar-cyan" style="width:${w.luminosityLevel}%"></div>
+        <div class="ev-time">${fmtTime(ev.timestamp)}</div>
+      </div>`;
+  }).join('');
+
+  // Events page (all, skip if already rendered)
+  const pageEl = document.getElementById('events-page-list');
+  const newest = events[0]?.timestamp;
+  if (newest === lastEventTs && pageEl.children.length > 1) return;
+  lastEventTs = newest;
+
+  pageEl.innerHTML = events.map(ev => {
+    const col     = evColor(ev.event);
+    const payload = JSON.stringify(ev.payload, null, 2);
+    return `
+      <div class="event-page-item">
+        <div class="ep-dot" style="background:${col};box-shadow:0 0 8px ${col}"></div>
+        <div style="flex:1;min-width:0">
+          <div class="ep-name" style="color:${col}">${ev.event}</div>
+          <div class="ep-payload">${payload.length>200?payload.slice(0,197)+'…':payload}</div>
         </div>
-      </div>
-      <p class="ts">${fmtTime(w.timestamp)}</p>`;
-  }
+        <div class="ep-time">${fmtTime(ev.timestamp)}</div>
+      </div>`;
+  }).join('');
+}
 
-  // ── Render events ───────────────────────────────────────────────────────────
-  let lastEventTimestamp = null;
-  let localEvents = [];
+function clearEventsPage() {
+  document.getElementById('events-page-list').innerHTML =
+    '<div style="color:var(--muted);text-align:center;padding:40px 0;font-size:13px">Log limpo.</div>';
+  lastEventTs = '__cleared__';
+}
 
-  const EVENT_COLORS = {
-    'traffic':  'var(--accent)',
-    'lighting': 'var(--yellow)',
-    'weather':  'var(--purple)',
-    'auto':     'var(--green)',
-  };
+/* ── Toast ──────────────────────────────────────────────────────────────────── */
+function toast(msg, ok = true) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderColor = ok ? '1px solid rgba(16,185,129,.4)' : '1px solid rgba(239,68,68,.4)';
+  el.style.border = `1px solid ${ok ? 'rgba(16,185,129,.35)' : 'rgba(239,68,68,.35)'}`;
+  el.style.color  = ok ? 'var(--green)' : 'var(--red)';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
 
-  function eventColor(name) {
-    if (name.startsWith('traffic'))  return EVENT_COLORS.traffic;
-    if (name.includes('auto'))       return EVENT_COLORS.auto;
-    if (name.startsWith('lighting')) return EVENT_COLORS.lighting;
-    if (name.startsWith('weather'))  return EVENT_COLORS.weather;
-    return 'var(--muted)';
-  }
+/* ── Fetch status ────────────────────────────────────────────────────────────── */
+async function fetchStatus() {
+  try {
+    const res  = await fetch('/api/status');
+    const json = await res.json();
+    if (!json.success) return;
+    renderTraffic(json.data.traffic);
+    renderLighting(json.data.lighting);
+    renderWeather(json.data.weather);
+    document.getElementById('sync-tag').textContent =
+      'Sync: ' + fmtTime(json.data.lastSyncAt);
+  } catch { /* silent */ }
+}
 
-  function renderEvents(events) {
-    const container = document.getElementById('events-container');
-    if (!events.length) {
-      container.innerHTML = '<div class="empty-state">Nenhum evento registrado ainda.<br>Interaja com o dashboard para gerar eventos.</div>';
-      return;
+async function fetchEvents() {
+  try {
+    const res  = await fetch('/api/events?limit=40');
+    const json = await res.json();
+    if (json.success) renderEvents(json.data);
+  } catch { /* silent */ }
+}
+
+/* ── Lighting adjust ─────────────────────────────────────────────────────────── */
+async function adjustLighting(auto = false) {
+  const zoneId = document.getElementById('zone-select').value;
+  if (!zoneId || zoneId === 'Carregando…') { toast('Aguarde os dados carregarem.', false); return; }
+
+  const inputVal = document.getElementById('intensity-input').value;
+  const body     = { zoneId };
+  if (!auto && inputVal !== '') body.targetIntensity = Number(inputVal);
+
+  try {
+    const res  = await fetch('/api/lighting/adjust', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+    const json = await res.json();
+    if (json.success) {
+      toast(`✅ ${zoneId} → ${json.data.intensityPercent}%`);
+      fetchStatus();
+      fetchEvents();
+    } else {
+      toast(`❌ ${json.error}`, false);
     }
+  } catch { toast('❌ Erro de conexão.', false); }
+}
 
-    container.innerHTML = events.map(ev => {
-      const color   = eventColor(ev.event);
-      const payload = JSON.stringify(ev.payload);
-      const preview = payload.length > 90 ? payload.slice(0, 87) + '…' : payload;
+async function applySlider(zoneId, value) {
+  try {
+    await fetch('/api/lighting/adjust', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ zoneId, targetIntensity: Number(value) }),
+    });
+    fetchEvents();
+  } catch { /* silent */ }
+}
 
-      return `
-        <div class="event-item">
-          <div class="event-dot" style="background:${color};box-shadow:0 0 6px ${color}"></div>
-          <div class="event-content">
-            <div class="event-name" style="color:${color}">${ev.event}</div>
-            <div class="event-payload">${preview}</div>
-          </div>
-          <div class="event-time">${fmtTime(ev.timestamp)}</div>
-        </div>`;
-    }).join('');
-  }
-
-  function clearEvents() {
-    document.getElementById('events-container').innerHTML =
-      '<div class="empty-state">Log limpo. Novos eventos aparecerão aqui.</div>';
-    localEvents = [];
-    lastEventTimestamp = null;
-  }
-
-  // ── Fetch status ────────────────────────────────────────────────────────────
-  async function fetchStatus() {
-    try {
-      const res  = await fetch('/api/status');
-      const json = await res.json();
-      if (!json.success) return;
-      renderTraffic(json.data.traffic);
-      renderLighting(json.data.lighting);
-      renderWeather(json.data.weather);
-      document.getElementById('sync-time').textContent =
-        'Atualizado: ' + fmtTime(json.data.lastSyncAt);
-    } catch { /* silently ignore network errors */ }
-  }
-
-  // ── Fetch events ────────────────────────────────────────────────────────────
-  async function fetchEvents() {
-    try {
-      const res  = await fetch('/api/events?limit=40');
-      const json = await res.json();
-      if (!json.success) return;
-      renderEvents(json.data);
-    } catch { /* silently ignore */ }
-  }
-
-  // ── Adjust lighting ─────────────────────────────────────────────────────────
-  async function adjustLighting(auto = false) {
-    const zoneId = document.getElementById('zone-select').value;
-    if (!zoneId || zoneId === 'Aguardando dados…') {
-      toast('Aguarde os dados carregarem.', false);
-      return;
-    }
-
-    const inputVal = document.getElementById('intensity-input').value;
-    const body     = { zoneId };
-    if (!auto && inputVal !== '') body.targetIntensity = Number(inputVal);
-
-    try {
-      const res  = await fetch('/api/lighting/adjust', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(body),
-      });
-      const json = await res.json();
-
-      if (json.success) {
-        toast(`✅ ${zoneId} → ${json.data.intensityPercent}% de intensidade`);
-        fetchStatus();
-        fetchEvents();
-      } else {
-        toast(`❌ ${json.error}`, false);
-      }
-    } catch {
-      toast('❌ Sem conexão com a API.', false);
-    }
-  }
-
-  // ── Init ────────────────────────────────────────────────────────────────────
-  fetchStatus();
-  fetchEvents();
-  setInterval(fetchStatus, 4000);
-  setInterval(fetchEvents, 3000);
+/* ── Init ──────────────────────────────────────────────────────────────────── */
+fetchStatus();
+fetchEvents();
+setInterval(fetchStatus, 4000);
+setInterval(fetchEvents, 3000);
 </script>
 </body>
 </html>
