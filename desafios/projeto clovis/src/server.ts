@@ -21,4 +21,8 @@ app.use(express.static(path.join(__dirname, "../public")));
 // Monta todas as rotas da cidade sob /api
 app.use("/api", cityRoutes);
 
+app.listen(PORT, () => {
+  console.log(`Smart City Middleware rodando em http://localhost:${PORT}`);
+});
+
 export default app;
