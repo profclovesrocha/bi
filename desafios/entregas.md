@@ -4,6 +4,7 @@
 - DESAFIO 3: 26/MAR/2026 (da AULA 4).
 - DEASFIO 4: 02/ABR/2026 (da AULA 5).
 - DESAFIO FINAL: 11/JUNHO/2026 (REF.: PRÁTICAS NO LAB.)
+- Link em destaque INSCRIÇÕES | FACEPE E SECTI EDITAL COMPET 14/2026: https://forms.gle/zD3ZLcyEcpTMdEfn7
 
 Com base nos conteúdos avançados das aulas 3, 4 e 5 e no projeto "Alfabetizando com AlegrIA", apresento a estrutura para o **Desafio Final (AV2)**. Este desafio foca na implementação técnica e na mineração de dados para apoio à decisão no **IMIP** OU OUTRO HOSPITAL INFANTIL.
 
