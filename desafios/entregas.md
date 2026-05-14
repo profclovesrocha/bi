@@ -70,6 +70,7 @@ O seminário será a vitrine do conhecimento adquirido. Cada equipe terá **15 a
 - Power BI: https://www.microsoft.com/pt-br/power-platform/products/power-bi/getting-started-with-power-bi
 - FONTE DE DADOS: https://datasus.saude.gov.br/
 - FONTE DE DADOS EDUCACIONAIS: https://app.powerbi.com/view?r=eyJrIjoiODhhNmI1ZWYtMmZmYy00NjVlLTk4MjQtYjlmMTUxZTJlYTI0IiwidCI6IjA0ZTcxZThlLTUwZDMtNDU1ZC04ODAzLWM3ZGI4ODhkNjRiYiJ9
+- Sugestão Final | Selenium automates browsers: https://www.selenium.dev/
 
 # SUGESTÃO de Desafios para Smart City 
 - https://docs.google.com/document/d/1C0nNNBLqCDSXJoIcvWlhaoC26HUpmbETfKGtKsIpeJs/edit?usp=sharing
