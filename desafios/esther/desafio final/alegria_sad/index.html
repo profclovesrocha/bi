@@ -1,0 +1,1769 @@
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SAD AlegrIA – Dashboard IMIP</title>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+		<style>
+			:root {
+				--bg: #f8f7f4;
+				--surface: #ffffff;
+				--surface2: #f1efe8;
+				--border: rgba(0, 0, 0, 0.1);
+				--border-md: rgba(0, 0, 0, 0.18);
+				--text: #1a1a1a;
+				--text2: #5f5e5a;
+				--text3: #888780;
+				--purple-fill: #eeedfe;
+				--purple-text: #3c3489;
+				--teal-fill: #e1f5ee;
+				--teal-text: #0f6e56;
+				--amber-fill: #faeeda;
+				--amber-text: #854f0b;
+				--blue-fill: #e6f1fb;
+				--blue-text: #185fa5;
+				--coral-fill: #faece7;
+				--coral-text: #993c1d;
+				--green-fill: #eaf3de;
+				--green-text: #3b6d11;
+				--red-fill: #fcebeb;
+				--red-text: #a32d2d;
+				--r: 10px;
+				--r-sm: 6px;
+				--shadow: none;
+			}
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--bg: #1e1e1c;
+					--surface: #2a2a28;
+					--surface2: #343430;
+					--border: rgba(255, 255, 255, 0.1);
+					--border-md: rgba(255, 255, 255, 0.18);
+					--text: #f0ede6;
+					--text2: #b4b2a9;
+					--text3: #888780;
+					--purple-fill: #26215c;
+					--purple-text: #cecdfa;
+					--teal-fill: #04342c;
+					--teal-text: #9fe1cb;
+					--amber-fill: #412402;
+					--amber-text: #fac775;
+					--blue-fill: #042c53;
+					--blue-text: #b5d4f4;
+					--coral-fill: #4a1b0c;
+					--coral-text: #f5c4b3;
+					--green-fill: #173404;
+					--green-text: #c0dd97;
+					--red-fill: #501313;
+					--red-text: #f7c1c1;
+				}
+			}
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+				background: var(--bg);
+				color: var(--text);
+				font-size: 14px;
+				line-height: 1.5;
+			}
+			.header {
+				background: var(--surface);
+				border-bottom: 0.5px solid var(--border);
+				padding: 14px 24px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				position: sticky;
+				top: 0;
+				z-index: 100;
+			}
+			.header-left {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+			.logo-badge {
+				width: 36px;
+				height: 36px;
+				border-radius: 8px;
+				background: var(--purple-fill);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--purple-text);
+				font-size: 18px;
+			}
+			.header h1 {
+				font-size: 16px;
+				font-weight: 500;
+				color: var(--text);
+			}
+			.header-sub {
+				font-size: 12px;
+				color: var(--text3);
+				margin-top: 1px;
+			}
+			.header-right {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+			}
+			.nav-tabs {
+				display: flex;
+				gap: 2px;
+				background: var(--surface2);
+				border-radius: var(--r-sm);
+				padding: 3px;
+			}
+			.tab-btn {
+				padding: 6px 14px;
+				border: none;
+				background: transparent;
+				color: var(--text2);
+				font-size: 13px;
+				font-weight: 400;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: all 0.15s;
+			}
+			.tab-btn.active {
+				background: var(--surface);
+				color: var(--text);
+				font-weight: 500;
+				border: 0.5px solid var(--border);
+			}
+			.main {
+				padding: 20px 24px;
+				max-width: 1100px;
+				margin: 0 auto;
+			}
+			.section {
+				display: none;
+			}
+			.section.active {
+				display: block;
+			}
+			.grid-4 {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 12px;
+				margin-bottom: 20px;
+			}
+			.grid-2 {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 16px;
+				margin-bottom: 20px;
+			}
+			.grid-3 {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 12px;
+				margin-bottom: 20px;
+			}
+			.metric-card {
+				background: var(--surface2);
+				border-radius: var(--r-sm);
+				padding: 14px 16px;
+			}
+			.metric-label {
+				font-size: 12px;
+				color: var(--text3);
+				margin-bottom: 4px;
+				font-weight: 400;
+			}
+			.metric-value {
+				font-size: 24px;
+				font-weight: 500;
+				color: var(--text);
+				line-height: 1.1;
+			}
+			.metric-sub {
+				font-size: 11px;
+				color: var(--text3);
+				margin-top: 3px;
+			}
+			.metric-badge {
+				display: inline-block;
+				padding: 2px 8px;
+				border-radius: 4px;
+				font-size: 11px;
+				font-weight: 500;
+				margin-top: 4px;
+			}
+			.badge-green {
+				background: var(--green-fill);
+				color: var(--green-text);
+			}
+			.badge-amber {
+				background: var(--amber-fill);
+				color: var(--amber-text);
+			}
+			.badge-red {
+				background: var(--red-fill);
+				color: var(--red-text);
+			}
+			.badge-purple {
+				background: var(--purple-fill);
+				color: var(--purple-text);
+			}
+			.badge-teal {
+				background: var(--teal-fill);
+				color: var(--teal-text);
+			}
+			.badge-blue {
+				background: var(--blue-fill);
+				color: var(--blue-text);
+			}
+			.card {
+				background: var(--surface);
+				border: 0.5px solid var(--border);
+				border-radius: var(--r);
+				padding: 18px 20px;
+				margin-bottom: 16px;
+			}
+			.card-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 16px;
+			}
+			.card-title {
+				font-size: 14px;
+				font-weight: 500;
+				color: var(--text);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.card-title i {
+				color: var(--text3);
+				font-size: 16px;
+			}
+			.card-sub {
+				font-size: 12px;
+				color: var(--text3);
+			}
+			.chart-wrap {
+				position: relative;
+				width: 100%;
+				height: 240px;
+			}
+			.chart-wrap-sm {
+				position: relative;
+				width: 100%;
+				height: 180px;
+			}
+			.chart-wrap-lg {
+				position: relative;
+				width: 100%;
+				height: 300px;
+			}
+			.filter-row {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				margin-bottom: 16px;
+				flex-wrap: wrap;
+			}
+			.filter-row select,
+			.filter-row input {
+				padding: 6px 10px;
+				border: 0.5px solid var(--border-md);
+				border-radius: var(--r-sm);
+				background: var(--surface);
+				color: var(--text);
+				font-size: 13px;
+				cursor: pointer;
+			}
+			.filter-row label {
+				font-size: 12px;
+				color: var(--text2);
+			}
+			.progress-bar-wrap {
+				margin-bottom: 14px;
+			}
+			.progress-label {
+				display: flex;
+				justify-content: space-between;
+				font-size: 13px;
+				color: var(--text2);
+				margin-bottom: 4px;
+			}
+			.progress-track {
+				height: 8px;
+				background: var(--surface2);
+				border-radius: 4px;
+				overflow: hidden;
+			}
+			.progress-fill {
+				height: 100%;
+				border-radius: 4px;
+				transition: width 0.6s ease;
+			}
+			.whatsif-row {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				margin-bottom: 16px;
+			}
+			.whatsif-item {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+			.whatsif-item label {
+				font-size: 13px;
+				color: var(--text2);
+				width: 180px;
+				flex-shrink: 0;
+			}
+			.whatsif-item input[type='range'] {
+				flex: 1;
+			}
+			.whatsif-item .val-out {
+				font-size: 13px;
+				font-weight: 500;
+				min-width: 48px;
+				text-align: right;
+			}
+			.result-box {
+				background: var(--purple-fill);
+				border-radius: var(--r-sm);
+				padding: 14px 18px;
+			}
+			.result-box-title {
+				font-size: 12px;
+				color: var(--purple-text);
+				margin-bottom: 8px;
+			}
+			.result-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				margin-bottom: 6px;
+			}
+			.result-row-label {
+				font-size: 13px;
+				color: var(--text2);
+			}
+			.result-row-val {
+				font-size: 18px;
+				font-weight: 500;
+				color: var(--purple-text);
+			}
+			.drill-breadcrumb {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				font-size: 12px;
+				color: var(--text3);
+				margin-bottom: 12px;
+				flex-wrap: wrap;
+			}
+			.drill-breadcrumb span {
+				color: var(--text2);
+			}
+			.drill-breadcrumb a {
+				color: var(--blue-text);
+				cursor: pointer;
+				text-decoration: none;
+			}
+			.drill-breadcrumb a:hover {
+				text-decoration: underline;
+			}
+			.drill-sep {
+				color: var(--text3);
+			}
+			.cluster-pill {
+				display: inline-flex;
+				align-items: center;
+				gap: 4px;
+				padding: 3px 10px;
+				border-radius: 12px;
+				font-size: 12px;
+				font-weight: 500;
+			}
+			table.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 13px;
+			}
+			table.data-table th {
+				text-align: left;
+				padding: 8px 10px;
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--text3);
+				border-bottom: 0.5px solid var(--border);
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+			}
+			table.data-table td {
+				padding: 8px 10px;
+				border-bottom: 0.5px solid var(--border);
+				color: var(--text2);
+			}
+			table.data-table tr:last-child td {
+				border-bottom: none;
+			}
+			table.data-table td:first-child {
+				color: var(--text);
+				font-weight: 400;
+			}
+			.legend-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 14px;
+				margin-bottom: 10px;
+				font-size: 12px;
+				color: var(--text2);
+			}
+			.legend-item {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+			.legend-dot {
+				width: 10px;
+				height: 10px;
+				border-radius: 2px;
+			}
+			.sentiment-bar-wrap {
+				margin-bottom: 12px;
+			}
+			.sentiment-label {
+				font-size: 13px;
+				color: var(--text2);
+				margin-bottom: 5px;
+				display: flex;
+				justify-content: space-between;
+			}
+			.sentiment-track {
+				height: 10px;
+				background: var(--surface2);
+				border-radius: 5px;
+				overflow: hidden;
+			}
+			.sent-fill-pos {
+				background: #1d9e75;
+				height: 100%;
+			}
+			.sent-fill-neg {
+				background: #d85a30;
+				height: 100%;
+			}
+			.sent-fill-neu {
+				background: #888780;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header-left">
+				<div class="logo-badge"><i class="ti ti-brain" aria-hidden="true"></i></div>
+				<div>
+					<h1>SAD AlegrIA — IMIP</h1>
+					<div class="header-sub">
+						Sistema de Apoio à Decisão · Classe Hospitalar Figueira
+					</div>
+				</div>
+			</div>
+			<div class="header-right">
+				<div class="nav-tabs">
+					<button class="tab-btn active" onclick="showTab('visao-geral')">
+						Visão geral
+					</button>
+					<button class="tab-btn" onclick="showTab('olap')">OLAP / Drill-down</button>
+					<button class="tab-btn" onclick="showTab('mineracao')">Mineração social</button>
+					<button class="tab-btn" onclick="showTab('whatsif')">What-if</button>
+				</div>
+			</div>
+		</header>
+
+		<main class="main">
+			<!-- ======================= VISÃO GERAL ======================= -->
+			<section id="visao-geral" class="section active">
+				<div class="grid-4" style="margin-top: 4px">
+					<div class="metric-card">
+						<div class="metric-label">Pacientes atendidos</div>
+						<div class="metric-value">198</div>
+						<div class="metric-sub">em 2025</div>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">Total de sessões</div>
+						<div class="metric-value">1.000</div>
+						<span class="metric-badge badge-green">47,3% com progresso</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">ICE médio geral</div>
+						<div class="metric-value">0,487</div>
+						<span class="metric-badge badge-amber">Meta: 0,65</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">TAD médio geral</div>
+						<div class="metric-value">0,545</div>
+						<span class="metric-badge badge-blue">Meta: 0,60</span>
+					</div>
+				</div>
+
+				<div class="grid-4">
+					<div class="metric-card">
+						<div class="metric-label">Engajamento médio</div>
+						<div class="metric-value">0,698</div>
+						<span class="metric-badge badge-green">Moderado-alto</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">Bem-estar emocional</div>
+						<div class="metric-value">0,749</div>
+						<span class="metric-badge badge-teal">Bom</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">Sessões com progresso</div>
+						<div class="metric-value">473</div>
+						<span class="metric-badge badge-purple">47,3%</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">Sentimento social</div>
+						<div class="metric-value">28%</div>
+						<span class="metric-badge badge-green">positivo</span>
+					</div>
+				</div>
+
+				<div class="grid-2">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								<i class="ti ti-chart-bar" aria-hidden="true"></i>ICE por modalidade
+							</div>
+							<div class="card-sub">Índice de Continuidade Escolar</div>
+						</div>
+						<div class="legend-row">
+							<div class="legend-item">
+								<div class="legend-dot" style="background: #7f77dd"></div>
+								ICE médio
+							</div>
+							<div class="legend-item">
+								<div class="legend-dot" style="background: #1d9e75"></div>
+								TAD médio
+							</div>
+						</div>
+						<div class="chart-wrap">
+							<canvas
+								id="chartModalidade"
+								role="img"
+								aria-label="Gráfico de barras mostrando ICE e TAD médio por modalidade pedagógica"
+								>ICE e TAD por modalidade.</canvas
+							>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								<i class="ti ti-chart-donut" aria-hidden="true"></i>Segmentação de
+								pacientes
+							</div>
+							<div class="card-sub">Clusters de engajamento (K-Means)</div>
+						</div>
+						<div class="legend-row">
+							<div class="legend-item">
+								<div class="legend-dot" style="background: #7f77dd"></div>
+								Alto (53%)
+							</div>
+							<div class="legend-item">
+								<div class="legend-dot" style="background: #1d9e75"></div>
+								Moderado (47%)
+							</div>
+						</div>
+						<div class="chart-wrap">
+							<canvas
+								id="chartClusters"
+								role="img"
+								aria-label="Gráfico de rosca com distribuição de clusters de engajamento de pacientes"
+								>Distribuição de clusters: Alto Engajamento 106, Engajamento
+								Moderado 92.</canvas
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">
+							<i class="ti ti-trending-up" aria-hidden="true"></i>Progresso por KPI —
+							enfermarias principais
+						</div>
+						<div class="card-sub">
+							Percentual de sessões com avanço de nível de alfabetização
+						</div>
+					</div>
+					<div class="progress-bar-wrap">
+						<div class="progress-label"><span>Clínica Geral</span><span>60%</span></div>
+						<div class="progress-track">
+							<div
+								class="progress-fill"
+								style="width: 60%; background: #7f77dd"
+							></div>
+						</div>
+					</div>
+					<div class="progress-bar-wrap">
+						<div class="progress-label"><span>Oncologia</span><span>52%</span></div>
+						<div class="progress-track">
+							<div
+								class="progress-fill"
+								style="width: 52%; background: #7f77dd"
+							></div>
+						</div>
+					</div>
+					<div class="progress-bar-wrap">
+						<div class="progress-label"><span>Nefrologia</span><span>49%</span></div>
+						<div class="progress-track">
+							<div
+								class="progress-fill"
+								style="width: 49%; background: #1d9e75"
+							></div>
+						</div>
+					</div>
+					<div class="progress-bar-wrap">
+						<div class="progress-label"><span>Cardiologia</span><span>25%</span></div>
+						<div class="progress-track">
+							<div
+								class="progress-fill"
+								style="width: 25%; background: #ba7517"
+							></div>
+						</div>
+					</div>
+					<div class="progress-bar-wrap">
+						<div class="progress-label">
+							<span>UTI Pediátrica</span><span>22%</span>
+						</div>
+						<div class="progress-track">
+							<div
+								class="progress-fill"
+								style="width: 22%; background: #e24b4a"
+							></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ======================= OLAP / DRILL-DOWN ======================= -->
+			<section id="olap" class="section">
+				<div class="card" style="margin-top: 4px">
+					<div class="card-header">
+						<div class="card-title">
+							<i class="ti ti-layers-intersect" aria-hidden="true"></i>Análise OLAP —
+							Drill-down interativo
+						</div>
+						<div class="card-sub">
+							Clique em uma enfermaria para ver o detalhe mensal
+						</div>
+					</div>
+					<div class="drill-breadcrumb" id="breadcrumb">
+						<span>IMIP (hospital)</span>
+					</div>
+					<div class="filter-row">
+						<label>Ano:</label>
+						<select id="filtroAno" onchange="atualizarOLAP()">
+							<option value="2025">2025</option>
+						</select>
+						<label>Métrica:</label>
+						<select id="filtroMetrica" onchange="atualizarOLAP()">
+							<option value="ice">ICE médio</option>
+							<option value="tad">TAD médio</option>
+							<option value="pct">% com progresso</option>
+							<option value="eng">Engajamento médio</option>
+						</select>
+					</div>
+					<div class="legend-row">
+						<div class="legend-item">
+							<div class="legend-dot" style="background: #7f77dd"></div>
+							Oncologia
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot" style="background: #1d9e75"></div>
+							Clínica Geral
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot" style="background: #d85a30"></div>
+							Cardiologia
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot" style="background: #ba7517"></div>
+							Nefrologia
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot" style="background: #185fa5"></div>
+							Ortopedia
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot" style="background: #a32d2d"></div>
+							UTI Pediátrica
+						</div>
+					</div>
+					<div class="chart-wrap-lg">
+						<canvas
+							id="chartOLAP"
+							role="img"
+							aria-label="Gráfico de linhas mostrando evolução mensal do ICE por enfermaria"
+							>Evolução mensal por enfermaria.</canvas
+						>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">
+							<i class="ti ti-table" aria-hidden="true"></i>Visão materializada —
+							Progresso mensal
+						</div>
+						<div class="card-sub">
+							VM_PROGRESSO_MENSAL · atualização mensal automática
+						</div>
+					</div>
+					<div class="filter-row">
+						<label>Enfermaria:</label>
+						<select id="filtroEnfermaria" onchange="atualizarTabela()">
+							<option value="Todas">Todas</option>
+							<option>Oncologia</option>
+							<option>Clínica Geral</option>
+							<option>Cardiologia</option>
+							<option>Nefrologia</option>
+							<option>Ortopedia</option>
+							<option>UTI Pediátrica</option>
+						</select>
+						<label>Trimestre:</label>
+						<select id="filtroTrimestre" onchange="atualizarTabela()">
+							<option value="Todos">Todos</option>
+							<option value="1">T1 (Jan–Mar)</option>
+							<option value="2">T2 (Abr–Jun)</option>
+							<option value="3">T3 (Jul–Set)</option>
+							<option value="4">T4 (Out–Dez)</option>
+						</select>
+					</div>
+					<div style="overflow-x: auto">
+						<table class="data-table" id="tabelaOLAP">
+							<thead>
+								<tr>
+									<th>Mês</th>
+									<th>Enfermaria</th>
+									<th>Sessões</th>
+									<th>ICE médio</th>
+									<th>TAD médio</th>
+									<th>% Progresso</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="tbodyOLAP"></tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<!-- ======================= MINERAÇÃO SOCIAL ======================= -->
+			<section id="mineracao" class="section">
+				<div class="grid-3" style="margin-top: 4px">
+					<div class="metric-card">
+						<div class="metric-label">Total de posts coletados</div>
+						<div class="metric-value">300</div>
+						<span class="metric-badge badge-blue">#AlegrIA e afins</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">Sentimento positivo</div>
+						<div class="metric-value">28%</div>
+						<span class="metric-badge badge-green">84 posts</span>
+					</div>
+					<div class="metric-card">
+						<div class="metric-label">Engajamento total</div>
+						<div class="metric-value">47.295</div>
+						<span class="metric-badge badge-teal">likes + RTs + respostas</span>
+					</div>
+				</div>
+
+				<div class="grid-2">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								<i class="ti ti-heart" aria-hidden="true"></i>Distribuição de
+								sentimento
+							</div>
+						</div>
+						<div class="sentiment-bar-wrap">
+							<div class="sentiment-label">
+								<span>Positivo</span><span>28% · 84 posts</span>
+							</div>
+							<div class="sentiment-track">
+								<div class="sent-fill-pos" style="width: 28%"></div>
+							</div>
+						</div>
+						<div class="sentiment-bar-wrap">
+							<div class="sentiment-label">
+								<span>Neutro</span><span>56% · 168 posts</span>
+							</div>
+							<div class="sentiment-track">
+								<div class="sent-fill-neu" style="width: 56%"></div>
+							</div>
+						</div>
+						<div class="sentiment-bar-wrap">
+							<div class="sentiment-label">
+								<span>Negativo</span><span>16% · 48 posts</span>
+							</div>
+							<div class="sentiment-track">
+								<div class="sent-fill-neg" style="width: 16%"></div>
+							</div>
+						</div>
+						<div style="margin-top: 16px">
+							<div class="legend-row">
+								<div class="legend-item">
+									<div class="legend-dot" style="background: #1d9e75"></div>
+									Score positivo: +0,53
+								</div>
+								<div class="legend-item">
+									<div class="legend-dot" style="background: #d85a30"></div>
+									Score negativo: -0,50
+								</div>
+							</div>
+						</div>
+						<div class="chart-wrap">
+							<canvas
+								id="chartSentimento"
+								role="img"
+								aria-label="Gráfico de barras horizontais com distribuição de sentimento"
+								>Positivo 28%, Neutro 56%, Negativo 16%.</canvas
+							>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								<i class="ti ti-hash" aria-hidden="true"></i>Hashtags monitoradas
+							</div>
+							<div class="card-sub">Frequência e engajamento médio</div>
+						</div>
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th>Hashtag</th>
+									<th>Posts</th>
+									<th>Eng. médio</th>
+									<th>Tom</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>#CriancaInternada</td>
+									<td>52</td>
+									<td>162</td>
+									<td>
+										<span
+											class="cluster-pill"
+											style="
+												background: var(--amber-fill);
+												color: var(--amber-text);
+											"
+											>Misto</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>#AlegrIA</td>
+									<td>44</td>
+									<td>171</td>
+									<td>
+										<span
+											class="cluster-pill"
+											style="
+												background: var(--green-fill);
+												color: var(--green-text);
+											"
+											>Positivo</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>#ClasseHospitalar</td>
+									<td>40</td>
+									<td>155</td>
+									<td>
+										<span
+											class="cluster-pill"
+											style="
+												background: var(--green-fill);
+												color: var(--green-text);
+											"
+											>Positivo</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>#IMIP</td>
+									<td>38</td>
+									<td>157</td>
+									<td>
+										<span
+											class="cluster-pill"
+											style="
+												background: var(--amber-fill);
+												color: var(--amber-text);
+											"
+											>Misto</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>#HumanizacaoHospitalar</td>
+									<td>36</td>
+									<td>149</td>
+									<td>
+										<span
+											class="cluster-pill"
+											style="
+												background: var(--green-fill);
+												color: var(--green-text);
+											"
+											>Positivo</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>#EducacaoHospitalar</td>
+									<td>35</td>
+									<td>161</td>
+									<td>
+										<span
+											class="cluster-pill"
+											style="
+												background: var(--blue-fill);
+												color: var(--blue-text);
+											"
+											>Neutro</span
+										>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">
+							<i class="ti ti-user-search" aria-hidden="true"></i>Clusters de
+							pacientes por engajamento (K-Means)
+						</div>
+						<div class="card-sub">
+							Segmentação automática baseada em ICE, TAD e interações com a IA
+						</div>
+					</div>
+					<div class="grid-2">
+						<div>
+							<div class="chart-wrap">
+								<canvas
+									id="chartClustersDetalhe"
+									role="img"
+									aria-label="Gráfico de barras dos clusters de pacientes com métricas médias"
+									>Alto engajamento 106 pacientes, Moderado 92.</canvas
+								>
+							</div>
+						</div>
+						<div>
+							<table class="data-table">
+								<thead>
+									<tr>
+										<th>Cluster</th>
+										<th>Pacientes</th>
+										<th>ICE médio</th>
+										<th>Ação sugerida</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<span
+												class="cluster-pill"
+												style="
+													background: var(--purple-fill);
+													color: var(--purple-text);
+												"
+												>Alto</span
+											>
+										</td>
+										<td>106 (53%)</td>
+										<td>0,78</td>
+										<td>Avançar para produção autoral</td>
+									</tr>
+									<tr>
+										<td>
+											<span
+												class="cluster-pill"
+												style="
+													background: var(--teal-fill);
+													color: var(--teal-text);
+												"
+												>Moderado</span
+											>
+										</td>
+										<td>92 (47%)</td>
+										<td>0,52</td>
+										<td>Intensificar suporte com IA</td>
+									</tr>
+								</tbody>
+							</table>
+							<div
+								style="
+									margin-top: 14px;
+									padding: 12px 14px;
+									background: var(--amber-fill);
+									border-radius: var(--r-sm);
+								"
+							>
+								<div
+									style="
+										font-size: 12px;
+										color: var(--amber-text);
+										font-weight: 500;
+										margin-bottom: 4px;
+									"
+								>
+									<i class="ti ti-alert-triangle" aria-hidden="true"></i> Insight
+									acionável
+								</div>
+								<div style="font-size: 13px; color: var(--amber-text)">
+									47% dos pacientes estão em cluster moderado. Triagem sugerida
+									para intervenção pedagógica diferenciada na UTI Pediátrica e
+									Cardiologia.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ======================= WHAT-IF ======================= -->
+			<section id="whatsif" class="section">
+				<div class="card" style="margin-top: 4px">
+					<div class="card-header">
+						<div class="card-title">
+							<i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>Simulador
+							What-if — Impacto no ICE
+						</div>
+						<div class="card-sub">
+							Ajuste os parâmetros e veja o impacto projetado nos KPIs
+						</div>
+					</div>
+					<div class="whatsif-row">
+						<div class="whatsif-item">
+							<label>Carga horária de IA (min/sessão)</label>
+							<input
+								type="range"
+								id="wiIA"
+								min="5"
+								max="60"
+								value="20"
+								step="1"
+								oninput="calcWhatsif()"
+							/>
+							<span class="val-out" id="wiIA-out">20 min</span>
+						</div>
+						<div class="whatsif-item">
+							<label>Sessões por semana (por paciente)</label>
+							<input
+								type="range"
+								id="wiSessoes"
+								min="1"
+								max="7"
+								value="3"
+								step="1"
+								oninput="calcWhatsif()"
+							/>
+							<span class="val-out" id="wiSessoes-out">3 sessões</span>
+						</div>
+						<div class="whatsif-item">
+							<label>Engajamento médio projetado</label>
+							<input
+								type="range"
+								id="wiEng"
+								min="40"
+								max="100"
+								value="70"
+								step="1"
+								oninput="calcWhatsif()"
+							/>
+							<span class="val-out" id="wiEng-out">0,70</span>
+						</div>
+						<div class="whatsif-item">
+							<label>% Modalidades com IA generativa</label>
+							<input
+								type="range"
+								id="wiIA-pct"
+								min="0"
+								max="100"
+								value="60"
+								step="5"
+								oninput="calcWhatsif()"
+							/>
+							<span class="val-out" id="wiIA-pct-out">60%</span>
+						</div>
+					</div>
+
+					<div class="result-box">
+						<div class="result-box-title">
+							Projeção — resultados esperados com os parâmetros acima
+						</div>
+						<div class="result-row">
+							<span class="result-row-label">ICE projetado</span>
+							<span class="result-row-val" id="wiResultICE">0,487</span>
+						</div>
+						<div class="result-row">
+							<span class="result-row-label">TAD projetado</span>
+							<span class="result-row-val" id="wiResultTAD">0,545</span>
+						</div>
+						<div class="result-row">
+							<span class="result-row-label">% sessões com progresso</span>
+							<span class="result-row-val" id="wiResultProg">47,3%</span>
+						</div>
+						<div class="result-row">
+							<span class="result-row-label">Ganho sobre cenário atual</span>
+							<span class="result-row-val" id="wiGanho">—</span>
+						</div>
+					</div>
+
+					<div style="margin-top: 16px">
+						<div class="chart-wrap">
+							<canvas
+								id="chartWhatsif"
+								role="img"
+								aria-label="Gráfico comparando cenário atual e projetado para ICE e TAD"
+								>Comparação: cenário atual vs projetado.</canvas
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">
+							<i class="ti ti-shield-check" aria-hidden="true"></i>Conformidade LGPD —
+							painel de verificação
+						</div>
+					</div>
+					<table class="data-table">
+						<thead>
+							<tr>
+								<th>Requisito</th>
+								<th>Art. LGPD</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Anonimização de pacientes (SHA-256)</td>
+								<td>Art. 12</td>
+								<td>
+									<span
+										class="cluster-pill"
+										style="
+											background: var(--green-fill);
+											color: var(--green-text);
+										"
+										><i class="ti ti-check"></i> Implementado</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Consentimento dos responsáveis legais</td>
+								<td>Art. 14</td>
+								<td>
+									<span
+										class="cluster-pill"
+										style="
+											background: var(--green-fill);
+											color: var(--green-text);
+										"
+										><i class="ti ti-check"></i> Documentado</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Base legal: pesquisa em saúde pública</td>
+								<td>Art. 7º</td>
+								<td>
+									<span
+										class="cluster-pill"
+										style="
+											background: var(--green-fill);
+											color: var(--green-text);
+										"
+										><i class="ti ti-check"></i> Aprovado CEP</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Acesso por perfil de usuário</td>
+								<td>Art. 46</td>
+								<td>
+									<span
+										class="cluster-pill"
+										style="
+											background: var(--amber-fill);
+											color: var(--amber-text);
+										"
+										>Em implantação</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Protocolo de notificação de incidentes</td>
+								<td>Art. 48</td>
+								<td>
+									<span
+										class="cluster-pill"
+										style="
+											background: var(--green-fill);
+											color: var(--green-text);
+										"
+										><i class="ti ti-check"></i> Definido</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Auditoria de acessos ao DW</td>
+								<td>Art. 37</td>
+								<td>
+									<span
+										class="cluster-pill"
+										style="
+											background: var(--amber-fill);
+											color: var(--amber-text);
+										"
+										>Em implantação</span
+									>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</main>
+
+		<script>
+			const CORES = {
+				purple: '#7f77dd',
+				teal: '#1d9e75',
+				coral: '#d85a30',
+				amber: '#ba7517',
+				blue: '#185fa5',
+				red: '#a32d2d',
+				gray: '#888780',
+			};
+
+			function showTab(id) {
+				document.querySelectorAll('.section').forEach((s) => s.classList.remove('active'));
+				document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+				document.getElementById(id).classList.add('active');
+				event.target.classList.add('active');
+			}
+
+			// --- Gráfico ICE por modalidade ---
+			const modalidades = [
+				'Co-criação\nNarrativa',
+				'Quiz\nGameificado',
+				'Leitura\nassistida IA',
+				'Atividade\nSensorial',
+				'Produção\nTextual',
+			];
+			const iceMod = [0.517, 0.497, 0.504, 0.474, 0.484];
+			const tadMod = [0.549, 0.535, 0.547, 0.52, 0.536];
+			new Chart(document.getElementById('chartModalidade'), {
+				type: 'bar',
+				data: {
+					labels: ['Co-criação', 'Quiz', 'Leitura IA', 'Sensorial', 'Produção'],
+					datasets: [
+						{
+							label: 'ICE',
+							data: iceMod,
+							backgroundColor: CORES.purple + 'cc',
+							borderWidth: 0,
+						},
+						{
+							label: 'TAD',
+							data: tadMod,
+							backgroundColor: CORES.teal + 'cc',
+							borderWidth: 0,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: { legend: { display: false } },
+					scales: {
+						y: { min: 0.4, max: 0.6, grid: { color: 'rgba(128,128,128,0.1)' } },
+						x: { grid: { display: false } },
+					},
+				},
+			});
+
+			// --- Donut clusters ---
+			new Chart(document.getElementById('chartClusters'), {
+				type: 'doughnut',
+				data: {
+					labels: ['Alto Engajamento (106)', 'Moderado (92)'],
+					datasets: [
+						{
+							data: [106, 92],
+							backgroundColor: [CORES.purple, CORES.teal],
+							borderWidth: 0,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					cutout: '65%',
+					plugins: { legend: { display: false } },
+				},
+			});
+
+			// --- OLAP linha mensal ---
+			const meses = [
+				'Jan',
+				'Fev',
+				'Mar',
+				'Abr',
+				'Mai',
+				'Jun',
+				'Jul',
+				'Ago',
+				'Set',
+				'Out',
+				'Nov',
+				'Dez',
+			];
+			const dadosPorEnfermaria = {
+				Oncologia: [0.52, 0.54, 0.5, 0.56, 0.53, 0.55, 0.57, 0.54, 0.51, 0.55, 0.58, 0.6],
+				'Clínica Geral': [
+					0.53, 0.55, 0.57, 0.59, 0.56, 0.58, 0.6, 0.57, 0.54, 0.57, 0.59, 0.62,
+				],
+				Cardiologia: [0.48, 0.5, 0.47, 0.52, 0.49, 0.51, 0.53, 0.5, 0.47, 0.5, 0.52, 0.55],
+				Nefrologia: [0.5, 0.51, 0.49, 0.53, 0.51, 0.52, 0.54, 0.52, 0.49, 0.52, 0.54, 0.56],
+				Ortopedia: [0.49, 0.5, 0.48, 0.51, 0.5, 0.51, 0.52, 0.5, 0.48, 0.51, 0.52, 0.54],
+				'UTI Pediátrica': [
+					0.42, 0.44, 0.41, 0.45, 0.43, 0.44, 0.46, 0.44, 0.41, 0.43, 0.45, 0.47,
+				],
+			};
+			const coresEnf = [
+				CORES.purple,
+				CORES.teal,
+				CORES.coral,
+				CORES.amber,
+				CORES.blue,
+				CORES.red,
+			];
+			const enfs = Object.keys(dadosPorEnfermaria);
+			const chartOLAP = new Chart(document.getElementById('chartOLAP'), {
+				type: 'line',
+				data: {
+					labels: meses,
+					datasets: enfs.map((e, i) => ({
+						label: e,
+						data: dadosPorEnfermaria[e],
+						borderColor: coresEnf[i],
+						backgroundColor: 'transparent',
+						borderWidth: 2,
+						pointRadius: 3,
+						tension: 0.3,
+						borderDash: i >= 4 ? [4, 3] : [],
+					})),
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: { legend: { display: false } },
+					scales: {
+						y: { min: 0.35, max: 0.7, grid: { color: 'rgba(128,128,128,0.1)' } },
+						x: { grid: { display: false } },
+					},
+				},
+			});
+
+			function atualizarOLAP() {
+				const metrica = document.getElementById('filtroMetrica').value;
+				const dados = {
+					ice: enfs.map((e) => dadosPorEnfermaria[e]),
+					tad: enfs.map((e) => dadosPorEnfermaria[e].map((v) => +(v + 0.05).toFixed(3))),
+					pct: enfs.map((e) => dadosPorEnfermaria[e].map((v) => +(v * 90).toFixed(1))),
+					eng: enfs.map((e) => dadosPorEnfermaria[e].map((v) => +(v + 0.18).toFixed(3))),
+				};
+				chartOLAP.data.datasets.forEach((ds, i) => {
+					ds.data = dados[metrica][i];
+				});
+				const yConf = {
+					ice: { min: 0.35, max: 0.7 },
+					tad: { min: 0.4, max: 0.75 },
+					pct: { min: 20, max: 65 },
+					eng: { min: 0.5, max: 0.9 },
+				};
+				chartOLAP.options.scales.y.min = yConf[metrica].min;
+				chartOLAP.options.scales.y.max = yConf[metrica].max;
+				chartOLAP.update();
+			}
+
+			// --- Tabela OLAP ---
+			const dadosTabela = [
+				{
+					mes: 'Jan/25',
+					tri: 1,
+					enf: 'Clínica Geral',
+					sessoes: 15,
+					ice: 0.527,
+					tad: 0.537,
+					pct: 60.0,
+				},
+				{
+					mes: 'Jan/25',
+					tri: 1,
+					enf: 'Oncologia',
+					sessoes: 11,
+					ice: 0.498,
+					tad: 0.531,
+					pct: 45.5,
+				},
+				{
+					mes: 'Jan/25',
+					tri: 1,
+					enf: 'Cardiologia',
+					sessoes: 8,
+					ice: 0.601,
+					tad: 0.554,
+					pct: 25.0,
+				},
+				{
+					mes: 'Jan/25',
+					tri: 1,
+					enf: 'Nefrologia',
+					sessoes: 12,
+					ice: 0.512,
+					tad: 0.52,
+					pct: 50.0,
+				},
+				{
+					mes: 'Fev/25',
+					tri: 1,
+					enf: 'Clínica Geral',
+					sessoes: 14,
+					ice: 0.541,
+					tad: 0.549,
+					pct: 57.1,
+				},
+				{
+					mes: 'Fev/25',
+					tri: 1,
+					enf: 'Oncologia',
+					sessoes: 13,
+					ice: 0.518,
+					tad: 0.54,
+					pct: 46.2,
+				},
+				{
+					mes: 'Mar/25',
+					tri: 1,
+					enf: 'UTI Pediátrica',
+					sessoes: 9,
+					ice: 0.421,
+					tad: 0.48,
+					pct: 22.2,
+				},
+				{
+					mes: 'Abr/25',
+					tri: 2,
+					enf: 'Oncologia',
+					sessoes: 16,
+					ice: 0.544,
+					tad: 0.557,
+					pct: 50.0,
+				},
+				{
+					mes: 'Abr/25',
+					tri: 2,
+					enf: 'Clínica Geral',
+					sessoes: 18,
+					ice: 0.558,
+					tad: 0.561,
+					pct: 61.1,
+				},
+				{
+					mes: 'Mai/25',
+					tri: 2,
+					enf: 'Cardiologia',
+					sessoes: 7,
+					ice: 0.493,
+					tad: 0.51,
+					pct: 28.6,
+				},
+				{
+					mes: 'Jun/25',
+					tri: 2,
+					enf: 'Nefrologia',
+					sessoes: 14,
+					ice: 0.525,
+					tad: 0.533,
+					pct: 50.0,
+				},
+				{
+					mes: 'Jul/25',
+					tri: 3,
+					enf: 'Oncologia',
+					sessoes: 17,
+					ice: 0.562,
+					tad: 0.571,
+					pct: 52.9,
+				},
+				{
+					mes: 'Ago/25',
+					tri: 3,
+					enf: 'Clínica Geral',
+					sessoes: 19,
+					ice: 0.574,
+					tad: 0.579,
+					pct: 63.2,
+				},
+				{
+					mes: 'Set/25',
+					tri: 3,
+					enf: 'UTI Pediátrica',
+					sessoes: 10,
+					ice: 0.413,
+					tad: 0.472,
+					pct: 20.0,
+				},
+				{
+					mes: 'Out/25',
+					tri: 4,
+					enf: 'Ortopedia',
+					sessoes: 11,
+					ice: 0.511,
+					tad: 0.524,
+					pct: 45.5,
+				},
+				{
+					mes: 'Nov/25',
+					tri: 4,
+					enf: 'Oncologia',
+					sessoes: 15,
+					ice: 0.581,
+					tad: 0.587,
+					pct: 53.3,
+				},
+				{
+					mes: 'Dez/25',
+					tri: 4,
+					enf: 'Clínica Geral',
+					sessoes: 17,
+					ice: 0.619,
+					tad: 0.598,
+					pct: 64.7,
+				},
+			];
+
+			function atualizarTabela() {
+				const enf = document.getElementById('filtroEnfermaria').value;
+				const tri = document.getElementById('filtroTrimestre').value;
+				let filtrados = dadosTabela.filter(
+					(d) =>
+						(enf === 'Todas' || d.enf === enf) &&
+						(tri === 'Todos' || String(d.tri) === tri),
+				);
+				const tbody = document.getElementById('tbodyOLAP');
+				tbody.innerHTML = filtrados
+					.map((d) => {
+						const status =
+							d.pct >= 55
+								? `<span class="cluster-pill" style="background:var(--green-fill);color:var(--green-text)">Acima da meta</span>`
+								: d.pct >= 40
+									? `<span class="cluster-pill" style="background:var(--amber-fill);color:var(--amber-text)">Na meta</span>`
+									: `<span class="cluster-pill" style="background:var(--red-fill);color:var(--red-text)">Abaixo</span>`;
+						return `<tr>
+      <td>${d.mes}</td><td>${d.enf}</td><td>${d.sessoes}</td>
+      <td>${d.ice.toFixed(3)}</td><td>${d.tad.toFixed(3)}</td>
+      <td>${d.pct.toFixed(1)}%</td><td>${status}</td>
+    </tr>`;
+					})
+					.join('');
+			}
+			atualizarTabela();
+
+			// --- Sentimento chart ---
+			new Chart(document.getElementById('chartSentimento'), {
+				type: 'bar',
+				data: {
+					labels: [
+						'Jan',
+						'Fev',
+						'Mar',
+						'Abr',
+						'Mai',
+						'Jun',
+						'Jul',
+						'Ago',
+						'Set',
+						'Out',
+						'Nov',
+						'Dez',
+					],
+					datasets: [
+						{
+							label: 'Positivo',
+							data: [5, 7, 6, 8, 8, 7, 9, 7, 6, 8, 8, 5],
+							backgroundColor: CORES.teal + 'cc',
+							borderWidth: 0,
+						},
+						{
+							label: 'Neutro',
+							data: [12, 13, 14, 15, 14, 13, 16, 14, 13, 14, 15, 11],
+							backgroundColor: CORES.gray + '99',
+							borderWidth: 0,
+						},
+						{
+							label: 'Negativo',
+							data: [3, 4, 3, 5, 4, 4, 5, 4, 3, 4, 5, 4],
+							backgroundColor: CORES.coral + 'cc',
+							borderWidth: 0,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: { legend: { display: false } },
+					scales: {
+						x: { stacked: true, grid: { display: false } },
+						y: { stacked: true, grid: { color: 'rgba(128,128,128,0.1)' } },
+					},
+				},
+			});
+
+			// --- Clusters detalhe ---
+			new Chart(document.getElementById('chartClustersDetalhe'), {
+				type: 'bar',
+				data: {
+					labels: ['Alto Engajamento', 'Engajamento Moderado'],
+					datasets: [
+						{
+							label: 'Pacientes',
+							data: [106, 92],
+							backgroundColor: [CORES.purple + 'cc', CORES.teal + 'cc'],
+							borderWidth: 0,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: { legend: { display: false } },
+					scales: {
+						y: { grid: { color: 'rgba(128,128,128,0.1)' } },
+						x: { grid: { display: false } },
+					},
+				},
+			});
+
+			// --- What-if ---
+			let chartWI = null;
+			function calcWhatsif() {
+				const ia = parseInt(document.getElementById('wiIA').value);
+				const sess = parseInt(document.getElementById('wiSessoes').value);
+				const eng = parseInt(document.getElementById('wiEng').value) / 100;
+				const pctIA = parseInt(document.getElementById('wiIA-pct').value) / 100;
+
+				document.getElementById('wiIA-out').textContent = ia + ' min';
+				document.getElementById('wiSessoes-out').textContent = sess + ' sessões';
+				document.getElementById('wiEng-out').textContent = eng.toFixed(2);
+				document.getElementById('wiIA-pct-out').textContent = Math.round(pctIA * 100) + '%';
+
+				const ICE_BASE = 0.487,
+					TAD_BASE = 0.545,
+					PROG_BASE = 47.3;
+
+				const ice_proj = Math.min(
+					0.95,
+					ICE_BASE *
+						(1 + (sess - 3) * 0.04) *
+						(1 + (eng - 0.7) * 0.3) *
+						(1 + (ia - 20) / 200),
+				);
+				const tad_proj = Math.min(
+					0.95,
+					TAD_BASE * (1 + pctIA * 0.2) * (1 + (ia - 20) / 150) * (1 + (eng - 0.7) * 0.25),
+				);
+				const prog_proj = Math.min(
+					95,
+					PROG_BASE * (1 + ((ice_proj - ICE_BASE) / ICE_BASE) * 0.6),
+				);
+				const ganho = ((ice_proj - ICE_BASE) / ICE_BASE) * 100;
+
+				document.getElementById('wiResultICE').textContent = ice_proj.toFixed(3);
+				document.getElementById('wiResultTAD').textContent = tad_proj.toFixed(3);
+				document.getElementById('wiResultProg').textContent = prog_proj.toFixed(1) + '%';
+				document.getElementById('wiGanho').textContent =
+					(ganho >= 0 ? '+' : '') + ganho.toFixed(1) + '% no ICE';
+				document.getElementById('wiGanho').style.color =
+					ganho >= 0 ? CORES.teal : CORES.coral;
+
+				const wiData = {
+					labels: ['ICE', 'TAD', '% Progresso (÷10)'],
+					atual: [ICE_BASE, TAD_BASE, PROG_BASE / 100],
+					proj: [ice_proj, tad_proj, prog_proj / 100],
+				};
+				if (!chartWI) {
+					chartWI = new Chart(document.getElementById('chartWhatsif'), {
+						type: 'radar',
+						data: {
+							labels: wiData.labels,
+							datasets: [
+								{
+									label: 'Cenário atual',
+									data: wiData.atual,
+									borderColor: CORES.gray,
+									backgroundColor: CORES.gray + '22',
+									borderWidth: 1.5,
+									pointRadius: 3,
+								},
+								{
+									label: 'Cenário projetado',
+									data: wiData.proj,
+									borderColor: CORES.purple,
+									backgroundColor: CORES.purple + '22',
+									borderWidth: 2,
+									pointRadius: 4,
+								},
+							],
+						},
+						options: {
+							responsive: true,
+							maintainAspectRatio: false,
+							plugins: { legend: { display: false } },
+							scales: { r: { min: 0, max: 1, ticks: { stepSize: 0.2 } } },
+						},
+					});
+				} else {
+					chartWI.data.datasets[1].data = wiData.proj;
+					chartWI.update();
+				}
+			}
+			calcWhatsif();
+		</script>
+	</body>
+</html>

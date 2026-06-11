@@ -1,0 +1,1973 @@
+{
+  "progresso_mensal": [
+    {
+      "ano": 2025,
+      "mes": 1,
+      "mes_nome": "January",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 8,
+      "ice_medio": 0.601,
+      "tad_medio": 0.554,
+      "engajamento_medio": 0.718,
+      "pct_progresso": 25.0
+    },
+    {
+      "ano": 2025,
+      "mes": 1,
+      "mes_nome": "January",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 15,
+      "ice_medio": 0.527,
+      "tad_medio": 0.537,
+      "engajamento_medio": 0.691,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 1,
+      "mes_nome": "January",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 8,
+      "ice_medio": 0.387,
+      "tad_medio": 0.603,
+      "engajamento_medio": 0.714,
+      "pct_progresso": 50.0
+    },
+    {
+      "ano": 2025,
+      "mes": 1,
+      "mes_nome": "January",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 15,
+      "ice_medio": 0.419,
+      "tad_medio": 0.459,
+      "engajamento_medio": 0.687,
+      "pct_progresso": 46.7
+    },
+    {
+      "ano": 2025,
+      "mes": 1,
+      "mes_nome": "January",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 10,
+      "ice_medio": 0.666,
+      "tad_medio": 0.633,
+      "engajamento_medio": 0.716,
+      "pct_progresso": 30.0
+    },
+    {
+      "ano": 2025,
+      "mes": 1,
+      "mes_nome": "January",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 21,
+      "ice_medio": 0.619,
+      "tad_medio": 0.555,
+      "engajamento_medio": 0.724,
+      "pct_progresso": 47.6
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "mes_nome": "February",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.581,
+      "tad_medio": 0.58,
+      "engajamento_medio": 0.662,
+      "pct_progresso": 53.8
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "mes_nome": "February",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 12,
+      "ice_medio": 0.306,
+      "tad_medio": 0.451,
+      "engajamento_medio": 0.662,
+      "pct_progresso": 33.3
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "mes_nome": "February",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.417,
+      "tad_medio": 0.388,
+      "engajamento_medio": 0.728,
+      "pct_progresso": 30.8
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "mes_nome": "February",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 11,
+      "ice_medio": 0.267,
+      "tad_medio": 0.549,
+      "engajamento_medio": 0.709,
+      "pct_progresso": 45.5
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "mes_nome": "February",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 13,
+      "ice_medio": 0.592,
+      "tad_medio": 0.594,
+      "engajamento_medio": 0.752,
+      "pct_progresso": 61.5
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "mes_nome": "February",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 14,
+      "ice_medio": 0.487,
+      "tad_medio": 0.514,
+      "engajamento_medio": 0.614,
+      "pct_progresso": 71.4
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "mes_nome": "March",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.442,
+      "tad_medio": 0.55,
+      "engajamento_medio": 0.692,
+      "pct_progresso": 38.5
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "mes_nome": "March",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 11,
+      "ice_medio": 0.595,
+      "tad_medio": 0.552,
+      "engajamento_medio": 0.74,
+      "pct_progresso": 27.3
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "mes_nome": "March",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 12,
+      "ice_medio": 0.437,
+      "tad_medio": 0.466,
+      "engajamento_medio": 0.644,
+      "pct_progresso": 75.0
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "mes_nome": "March",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 10,
+      "ice_medio": 0.459,
+      "tad_medio": 0.443,
+      "engajamento_medio": 0.628,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "mes_nome": "March",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 15,
+      "ice_medio": 0.543,
+      "tad_medio": 0.525,
+      "engajamento_medio": 0.69,
+      "pct_progresso": 40.0
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "mes_nome": "March",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 17,
+      "ice_medio": 0.475,
+      "tad_medio": 0.427,
+      "engajamento_medio": 0.725,
+      "pct_progresso": 41.2
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "mes_nome": "April",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.349,
+      "tad_medio": 0.377,
+      "engajamento_medio": 0.703,
+      "pct_progresso": 38.5
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "mes_nome": "April",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 25,
+      "ice_medio": 0.543,
+      "tad_medio": 0.519,
+      "engajamento_medio": 0.715,
+      "pct_progresso": 32.0
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "mes_nome": "April",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 12,
+      "ice_medio": 0.41,
+      "tad_medio": 0.492,
+      "engajamento_medio": 0.651,
+      "pct_progresso": 66.7
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "mes_nome": "April",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 7,
+      "ice_medio": 0.321,
+      "tad_medio": 0.391,
+      "engajamento_medio": 0.626,
+      "pct_progresso": 71.4
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "mes_nome": "April",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 15,
+      "ice_medio": 0.549,
+      "tad_medio": 0.567,
+      "engajamento_medio": 0.757,
+      "pct_progresso": 33.3
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "mes_nome": "April",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 12,
+      "ice_medio": 0.564,
+      "tad_medio": 0.647,
+      "engajamento_medio": 0.752,
+      "pct_progresso": 41.7
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "mes_nome": "May",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.508,
+      "tad_medio": 0.718,
+      "engajamento_medio": 0.69,
+      "pct_progresso": 46.2
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "mes_nome": "May",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 12,
+      "ice_medio": 0.531,
+      "tad_medio": 0.608,
+      "engajamento_medio": 0.705,
+      "pct_progresso": 33.3
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "mes_nome": "May",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 14,
+      "ice_medio": 0.438,
+      "tad_medio": 0.504,
+      "engajamento_medio": 0.686,
+      "pct_progresso": 57.1
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "mes_nome": "May",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 11,
+      "ice_medio": 0.462,
+      "tad_medio": 0.56,
+      "engajamento_medio": 0.728,
+      "pct_progresso": 27.3
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "mes_nome": "May",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 12,
+      "ice_medio": 0.454,
+      "tad_medio": 0.688,
+      "engajamento_medio": 0.705,
+      "pct_progresso": 58.3
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "mes_nome": "May",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 13,
+      "ice_medio": 0.598,
+      "tad_medio": 0.675,
+      "engajamento_medio": 0.755,
+      "pct_progresso": 30.8
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "mes_nome": "June",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.551,
+      "tad_medio": 0.4,
+      "engajamento_medio": 0.681,
+      "pct_progresso": 46.2
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "mes_nome": "June",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 11,
+      "ice_medio": 0.593,
+      "tad_medio": 0.616,
+      "engajamento_medio": 0.624,
+      "pct_progresso": 45.5
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "mes_nome": "June",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 15,
+      "ice_medio": 0.563,
+      "tad_medio": 0.563,
+      "engajamento_medio": 0.725,
+      "pct_progresso": 33.3
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "mes_nome": "June",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 12,
+      "ice_medio": 0.553,
+      "tad_medio": 0.725,
+      "engajamento_medio": 0.821,
+      "pct_progresso": 33.3
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "mes_nome": "June",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 25,
+      "ice_medio": 0.472,
+      "tad_medio": 0.614,
+      "engajamento_medio": 0.721,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "mes_nome": "June",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 12,
+      "ice_medio": 0.595,
+      "tad_medio": 0.557,
+      "engajamento_medio": 0.674,
+      "pct_progresso": 41.7
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "mes_nome": "July",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 10,
+      "ice_medio": 0.453,
+      "tad_medio": 0.577,
+      "engajamento_medio": 0.706,
+      "pct_progresso": 40.0
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "mes_nome": "July",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 21,
+      "ice_medio": 0.472,
+      "tad_medio": 0.447,
+      "engajamento_medio": 0.709,
+      "pct_progresso": 47.6
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "mes_nome": "July",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 8,
+      "ice_medio": 0.205,
+      "tad_medio": 0.579,
+      "engajamento_medio": 0.621,
+      "pct_progresso": 50.0
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "mes_nome": "July",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 17,
+      "ice_medio": 0.483,
+      "tad_medio": 0.551,
+      "engajamento_medio": 0.706,
+      "pct_progresso": 58.8
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "mes_nome": "July",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 11,
+      "ice_medio": 0.457,
+      "tad_medio": 0.601,
+      "engajamento_medio": 0.625,
+      "pct_progresso": 45.5
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "mes_nome": "July",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 12,
+      "ice_medio": 0.561,
+      "tad_medio": 0.57,
+      "engajamento_medio": 0.763,
+      "pct_progresso": 66.7
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "mes_nome": "August",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 15,
+      "ice_medio": 0.424,
+      "tad_medio": 0.54,
+      "engajamento_medio": 0.691,
+      "pct_progresso": 46.7
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "mes_nome": "August",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 15,
+      "ice_medio": 0.464,
+      "tad_medio": 0.517,
+      "engajamento_medio": 0.615,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "mes_nome": "August",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 16,
+      "ice_medio": 0.477,
+      "tad_medio": 0.473,
+      "engajamento_medio": 0.737,
+      "pct_progresso": 31.3
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "mes_nome": "August",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 17,
+      "ice_medio": 0.628,
+      "tad_medio": 0.548,
+      "engajamento_medio": 0.7,
+      "pct_progresso": 76.5
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "mes_nome": "August",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 18,
+      "ice_medio": 0.416,
+      "tad_medio": 0.558,
+      "engajamento_medio": 0.677,
+      "pct_progresso": 38.9
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "mes_nome": "August",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 22,
+      "ice_medio": 0.525,
+      "tad_medio": 0.607,
+      "engajamento_medio": 0.646,
+      "pct_progresso": 59.1
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "mes_nome": "September",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 16,
+      "ice_medio": 0.462,
+      "tad_medio": 0.475,
+      "engajamento_medio": 0.679,
+      "pct_progresso": 56.3
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "mes_nome": "September",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 17,
+      "ice_medio": 0.47,
+      "tad_medio": 0.567,
+      "engajamento_medio": 0.702,
+      "pct_progresso": 52.9
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "mes_nome": "September",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 15,
+      "ice_medio": 0.532,
+      "tad_medio": 0.637,
+      "engajamento_medio": 0.693,
+      "pct_progresso": 53.3
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "mes_nome": "September",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 10,
+      "ice_medio": 0.569,
+      "tad_medio": 0.471,
+      "engajamento_medio": 0.699,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "mes_nome": "September",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 10,
+      "ice_medio": 0.436,
+      "tad_medio": 0.428,
+      "engajamento_medio": 0.669,
+      "pct_progresso": 50.0
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "mes_nome": "September",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 22,
+      "ice_medio": 0.408,
+      "tad_medio": 0.6,
+      "engajamento_medio": 0.68,
+      "pct_progresso": 54.5
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "mes_nome": "October",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 13,
+      "ice_medio": 0.398,
+      "tad_medio": 0.458,
+      "engajamento_medio": 0.618,
+      "pct_progresso": 69.2
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "mes_nome": "October",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 16,
+      "ice_medio": 0.51,
+      "tad_medio": 0.546,
+      "engajamento_medio": 0.746,
+      "pct_progresso": 56.3
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "mes_nome": "October",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 10,
+      "ice_medio": 0.631,
+      "tad_medio": 0.607,
+      "engajamento_medio": 0.761,
+      "pct_progresso": 30.0
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "mes_nome": "October",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 15,
+      "ice_medio": 0.465,
+      "tad_medio": 0.514,
+      "engajamento_medio": 0.778,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "mes_nome": "October",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 17,
+      "ice_medio": 0.456,
+      "tad_medio": 0.456,
+      "engajamento_medio": 0.684,
+      "pct_progresso": 52.9
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "mes_nome": "October",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 18,
+      "ice_medio": 0.468,
+      "tad_medio": 0.505,
+      "engajamento_medio": 0.704,
+      "pct_progresso": 27.8
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "mes_nome": "November",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 10,
+      "ice_medio": 0.307,
+      "tad_medio": 0.423,
+      "engajamento_medio": 0.615,
+      "pct_progresso": 50.0
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "mes_nome": "November",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 24,
+      "ice_medio": 0.509,
+      "tad_medio": 0.631,
+      "engajamento_medio": 0.688,
+      "pct_progresso": 50.0
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "mes_nome": "November",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 16,
+      "ice_medio": 0.549,
+      "tad_medio": 0.675,
+      "engajamento_medio": 0.713,
+      "pct_progresso": 43.8
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "mes_nome": "November",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 5,
+      "ice_medio": 0.59,
+      "tad_medio": 0.507,
+      "engajamento_medio": 0.758,
+      "pct_progresso": 60.0
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "mes_nome": "November",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 13,
+      "ice_medio": 0.465,
+      "tad_medio": 0.581,
+      "engajamento_medio": 0.718,
+      "pct_progresso": 46.2
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "mes_nome": "November",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 16,
+      "ice_medio": 0.299,
+      "tad_medio": 0.545,
+      "engajamento_medio": 0.655,
+      "pct_progresso": 31.3
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "mes_nome": "December",
+      "enfermaria": "Cardiologia",
+      "total_sessoes": 5,
+      "ice_medio": 0.489,
+      "tad_medio": 0.388,
+      "engajamento_medio": 0.648,
+      "pct_progresso": 0.0
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "mes_nome": "December",
+      "enfermaria": "Clínica Geral",
+      "total_sessoes": 18,
+      "ice_medio": 0.536,
+      "tad_medio": 0.593,
+      "engajamento_medio": 0.728,
+      "pct_progresso": 33.3
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "mes_nome": "December",
+      "enfermaria": "Nefrologia",
+      "total_sessoes": 15,
+      "ice_medio": 0.467,
+      "tad_medio": 0.507,
+      "engajamento_medio": 0.729,
+      "pct_progresso": 26.7
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "mes_nome": "December",
+      "enfermaria": "Oncologia",
+      "total_sessoes": 11,
+      "ice_medio": 0.519,
+      "tad_medio": 0.543,
+      "engajamento_medio": 0.657,
+      "pct_progresso": 45.5
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "mes_nome": "December",
+      "enfermaria": "Ortopedia",
+      "total_sessoes": 8,
+      "ice_medio": 0.436,
+      "tad_medio": 0.688,
+      "engajamento_medio": 0.759,
+      "pct_progresso": 50.0
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "mes_nome": "December",
+      "enfermaria": "UTI Pediátrica",
+      "total_sessoes": 20,
+      "ice_medio": 0.452,
+      "tad_medio": 0.529,
+      "engajamento_medio": 0.7,
+      "pct_progresso": 55.0
+    }
+  ],
+  "kpi_modalidade": [
+    {
+      "modalidade": "Co-criação Narrativa",
+      "tipo": "Produção",
+      "usa_ia": 1,
+      "total_sessoes": 190,
+      "ice_medio": 0.517,
+      "tad_medio": 0.549,
+      "bem_estar_medio": 0.755,
+      "duracao_media_min": 40.4,
+      "interacoes_ia_media": 16.2
+    },
+    {
+      "modalidade": "Leitura Assistida por IA",
+      "tipo": "Recepção",
+      "usa_ia": 1,
+      "total_sessoes": 183,
+      "ice_medio": 0.504,
+      "tad_medio": 0.547,
+      "bem_estar_medio": 0.74,
+      "duracao_media_min": 41.1,
+      "interacoes_ia_media": 16.2
+    },
+    {
+      "modalidade": "Produção Textual",
+      "tipo": "Produção",
+      "usa_ia": 0,
+      "total_sessoes": 201,
+      "ice_medio": 0.482,
+      "tad_medio": 0.553,
+      "bem_estar_medio": 0.745,
+      "duracao_media_min": 41.3,
+      "interacoes_ia_media": 16.5
+    },
+    {
+      "modalidade": "Quiz Gamificado",
+      "tipo": "Avaliação",
+      "usa_ia": 1,
+      "total_sessoes": 206,
+      "ice_medio": 0.475,
+      "tad_medio": 0.527,
+      "bem_estar_medio": 0.745,
+      "duracao_media_min": 40.6,
+      "interacoes_ia_media": 15.7
+    },
+    {
+      "modalidade": "Atividade Sensorial",
+      "tipo": "Socioemocional",
+      "usa_ia": 0,
+      "total_sessoes": 220,
+      "ice_medio": 0.461,
+      "tad_medio": 0.547,
+      "bem_estar_medio": 0.757,
+      "duracao_media_min": 38.5,
+      "interacoes_ia_media": 16.3
+    }
+  ],
+  "segmentacao": [
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.494,
+      "eng_medio": 0.861
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.375,
+      "eng_medio": 0.816
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 1.0,
+      "eng_medio": 0.99
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.637,
+      "eng_medio": 0.806
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.528,
+      "eng_medio": 0.8
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.536,
+      "eng_medio": 0.797
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.665,
+      "eng_medio": 0.79
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.391,
+      "eng_medio": 0.686
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.492,
+      "eng_medio": 0.745
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.22,
+      "eng_medio": 0.606
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.372,
+      "eng_medio": 0.714
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.879,
+      "eng_medio": 0.745
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 4,
+      "ice_medio": 0.546,
+      "eng_medio": 0.666
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.526,
+      "eng_medio": 0.658
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.402,
+      "eng_medio": 0.665
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.621,
+      "eng_medio": 0.701
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 5,
+      "ice_medio": 0.493,
+      "eng_medio": 0.664
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.597,
+      "eng_medio": 0.682
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.617,
+      "eng_medio": 0.703
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.745,
+      "eng_medio": 0.738
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.477,
+      "eng_medio": 0.703
+    },
+    {
+      "faixa_etaria": "0-5 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.496,
+      "eng_medio": 0.68
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.578,
+      "eng_medio": 0.754
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.572,
+      "eng_medio": 0.784
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.488,
+      "eng_medio": 0.784
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 3,
+      "ice_medio": 0.617,
+      "eng_medio": 0.8
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 3,
+      "ice_medio": 0.453,
+      "eng_medio": 0.802
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.42,
+      "eng_medio": 0.752
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.709,
+      "eng_medio": 0.832
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.577,
+      "eng_medio": 0.787
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.482,
+      "eng_medio": 0.751
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.639,
+      "eng_medio": 0.818
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.449,
+      "eng_medio": 0.543
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.346,
+      "eng_medio": 0.542
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.544,
+      "eng_medio": 0.683
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.476,
+      "eng_medio": 0.658
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.6,
+      "eng_medio": 0.737
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 4,
+      "ice_medio": 0.406,
+      "eng_medio": 0.688
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.535,
+      "eng_medio": 0.703
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 4,
+      "ice_medio": 0.446,
+      "eng_medio": 0.625
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.459,
+      "eng_medio": 0.675
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.586,
+      "eng_medio": 0.717
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 4,
+      "ice_medio": 0.493,
+      "eng_medio": 0.666
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 6,
+      "ice_medio": 0.493,
+      "eng_medio": 0.672
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.246,
+      "eng_medio": 0.656
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.526,
+      "eng_medio": 0.659
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.307,
+      "eng_medio": 0.686
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.337,
+      "eng_medio": 0.617
+    },
+    {
+      "faixa_etaria": "10-13 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.62,
+      "eng_medio": 0.748
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.424,
+      "eng_medio": 0.752
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.549,
+      "eng_medio": 0.778
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.538,
+      "eng_medio": 0.758
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.619,
+      "eng_medio": 0.76
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.44,
+      "eng_medio": 0.772
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.706,
+      "eng_medio": 0.777
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.505,
+      "eng_medio": 0.772
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.571,
+      "eng_medio": 0.808
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.51,
+      "eng_medio": 0.783
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.361,
+      "eng_medio": 0.53
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.324,
+      "eng_medio": 0.538
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.313,
+      "eng_medio": 0.53
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.229,
+      "eng_medio": 0.51
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.464,
+      "eng_medio": 0.666
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.459,
+      "eng_medio": 0.639
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.397,
+      "eng_medio": 0.66
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 5,
+      "ice_medio": 0.499,
+      "eng_medio": 0.671
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.424,
+      "eng_medio": 0.629
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.456,
+      "eng_medio": 0.702
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.557,
+      "eng_medio": 0.709
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.448,
+      "eng_medio": 0.645
+    },
+    {
+      "faixa_etaria": "14-17 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.433,
+      "eng_medio": 0.696
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.815,
+      "eng_medio": 0.863
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.401,
+      "eng_medio": 0.872
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.881,
+      "eng_medio": 0.853
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 2,
+      "ice_medio": 0.507,
+      "eng_medio": 0.838
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.457,
+      "eng_medio": 0.773
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 3,
+      "ice_medio": 0.55,
+      "eng_medio": 0.806
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.583,
+      "eng_medio": 0.833
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.616,
+      "eng_medio": 0.754
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.732,
+      "eng_medio": 0.782
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Alto Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.843,
+      "eng_medio": 0.915
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.2,
+      "eng_medio": 0.425
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.292,
+      "eng_medio": 0.44
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Baixo Engajamento",
+      "n_pacientes": 1,
+      "ice_medio": 0.24,
+      "eng_medio": 0.518
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.525,
+      "eng_medio": 0.58
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.383,
+      "eng_medio": 0.671
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 4,
+      "ice_medio": 0.388,
+      "eng_medio": 0.678
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.556,
+      "eng_medio": 0.7
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 6,
+      "ice_medio": 0.431,
+      "eng_medio": 0.65
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Cirúrgico/Agudo",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.565,
+      "eng_medio": 0.663
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 5,
+      "ice_medio": 0.521,
+      "eng_medio": 0.671
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 4,
+      "ice_medio": 0.504,
+      "eng_medio": 0.684
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 5,
+      "ice_medio": 0.464,
+      "eng_medio": 0.686
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.381,
+      "eng_medio": 0.651
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Condição Crônica",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 7,
+      "ice_medio": 0.506,
+      "eng_medio": 0.691
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Cardiologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 3,
+      "ice_medio": 0.344,
+      "eng_medio": 0.648
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Clínica Geral",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.554,
+      "eng_medio": 0.71
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Nefrologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 2,
+      "ice_medio": 0.377,
+      "eng_medio": 0.57
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Oncologia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.384,
+      "eng_medio": 0.6
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "Ortopedia",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.1,
+      "eng_medio": 0.72
+    },
+    {
+      "faixa_etaria": "6-9 anos",
+      "grupo_diagnostico": "Oncológico",
+      "enfermaria": "UTI Pediátrica",
+      "cluster_engajamento": "Engajamento Moderado",
+      "n_pacientes": 1,
+      "ice_medio": 0.517,
+      "eng_medio": 0.647
+    }
+  ],
+  "resumo_geral": [
+    {
+      "total_pacientes": 198,
+      "total_sessoes": 1000,
+      "ice_geral": 0.487,
+      "tad_geral": 0.545,
+      "engajamento_geral": 0.698,
+      "bem_estar_geral": 0.749,
+      "sessoes_com_progresso": 473,
+      "pct_progresso": 47.3
+    }
+  ],
+  "sentimento": [
+    {
+      "polaridade": "negativo",
+      "n": 48,
+      "score_medio": -0.5005,
+      "eng_social_medio": 159.6
+    },
+    {
+      "polaridade": "neutro",
+      "n": 168,
+      "score_medio": 0.0,
+      "eng_social_medio": 153.1
+    },
+    {
+      "polaridade": "positivo",
+      "n": 84,
+      "score_medio": 0.5295,
+      "eng_social_medio": 165.6
+    }
+  ],
+  "sentimento_temporal": [
+    {
+      "mes": "2025-01",
+      "polaridade": "negativo",
+      "n": 4
+    },
+    {
+      "mes": "2025-01",
+      "polaridade": "neutro",
+      "n": 19
+    },
+    {
+      "mes": "2025-01",
+      "polaridade": "positivo",
+      "n": 3
+    },
+    {
+      "mes": "2025-02",
+      "polaridade": "neutro",
+      "n": 11
+    },
+    {
+      "mes": "2025-02",
+      "polaridade": "positivo",
+      "n": 7
+    },
+    {
+      "mes": "2025-03",
+      "polaridade": "negativo",
+      "n": 9
+    },
+    {
+      "mes": "2025-03",
+      "polaridade": "neutro",
+      "n": 14
+    },
+    {
+      "mes": "2025-03",
+      "polaridade": "positivo",
+      "n": 11
+    },
+    {
+      "mes": "2025-04",
+      "polaridade": "negativo",
+      "n": 7
+    },
+    {
+      "mes": "2025-04",
+      "polaridade": "neutro",
+      "n": 10
+    },
+    {
+      "mes": "2025-04",
+      "polaridade": "positivo",
+      "n": 6
+    },
+    {
+      "mes": "2025-05",
+      "polaridade": "negativo",
+      "n": 2
+    },
+    {
+      "mes": "2025-05",
+      "polaridade": "neutro",
+      "n": 17
+    },
+    {
+      "mes": "2025-05",
+      "polaridade": "positivo",
+      "n": 11
+    },
+    {
+      "mes": "2025-06",
+      "polaridade": "negativo",
+      "n": 3
+    },
+    {
+      "mes": "2025-06",
+      "polaridade": "neutro",
+      "n": 18
+    },
+    {
+      "mes": "2025-06",
+      "polaridade": "positivo",
+      "n": 8
+    },
+    {
+      "mes": "2025-07",
+      "polaridade": "negativo",
+      "n": 4
+    },
+    {
+      "mes": "2025-07",
+      "polaridade": "neutro",
+      "n": 20
+    },
+    {
+      "mes": "2025-07",
+      "polaridade": "positivo",
+      "n": 7
+    },
+    {
+      "mes": "2025-08",
+      "polaridade": "negativo",
+      "n": 4
+    },
+    {
+      "mes": "2025-08",
+      "polaridade": "neutro",
+      "n": 11
+    },
+    {
+      "mes": "2025-08",
+      "polaridade": "positivo",
+      "n": 6
+    },
+    {
+      "mes": "2025-09",
+      "polaridade": "negativo",
+      "n": 5
+    },
+    {
+      "mes": "2025-09",
+      "polaridade": "neutro",
+      "n": 9
+    },
+    {
+      "mes": "2025-09",
+      "polaridade": "positivo",
+      "n": 3
+    },
+    {
+      "mes": "2025-10",
+      "polaridade": "negativo",
+      "n": 6
+    },
+    {
+      "mes": "2025-10",
+      "polaridade": "neutro",
+      "n": 9
+    },
+    {
+      "mes": "2025-10",
+      "polaridade": "positivo",
+      "n": 8
+    },
+    {
+      "mes": "2025-11",
+      "polaridade": "negativo",
+      "n": 2
+    },
+    {
+      "mes": "2025-11",
+      "polaridade": "neutro",
+      "n": 17
+    },
+    {
+      "mes": "2025-11",
+      "polaridade": "positivo",
+      "n": 7
+    },
+    {
+      "mes": "2025-12",
+      "polaridade": "negativo",
+      "n": 2
+    },
+    {
+      "mes": "2025-12",
+      "polaridade": "neutro",
+      "n": 13
+    },
+    {
+      "mes": "2025-12",
+      "polaridade": "positivo",
+      "n": 7
+    }
+  ]
+}

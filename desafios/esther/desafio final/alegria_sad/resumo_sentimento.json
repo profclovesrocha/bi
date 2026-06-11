@@ -1,0 +1,24 @@
+{
+  "total_tweets": 300,
+  "positivos": 84,
+  "negativos": 48,
+  "neutros": 168,
+  "pct_positivo": 28.0,
+  "score_medio": 0.0682,
+  "engajamento_total": 47295,
+  "hashtag_mais_citada": "#CriancaInternada",
+  "top_palavras_positivas": [
+    "crianças",
+    "projeto",
+    "ver",
+    "alegria",
+    "rosto"
+  ],
+  "top_palavras_negativas": [
+    "escola",
+    "crianças",
+    "saudade",
+    "grande",
+    "internação"
+  ]
+}
